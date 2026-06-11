@@ -1,3 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: Inter, 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --color-ocean-bg: #eef5f4;
+  --color-ocean-deep: #06242c;
+  --color-ocean-deeper: #031820;
+  --color-ocean-surface: #ffffff;
+  --color-ocean-soft: #f5faf9;
+  --color-ocean-ink: #102a33;
+  --color-ocean-muted: #6c8389;
+  --color-ocean-line: #d9e7e7;
+  --color-ocean-primary: #087f8c;
+  --color-ocean-dark: #064e5a;
+  --color-ocean-accent: #10b9aa;
+}
+
 :root {
   --bg: #eef5f4;
   --bg-deep: #06242c;
