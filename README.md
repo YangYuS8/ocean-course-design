@@ -48,7 +48,23 @@
 
 ## 本地运行
 
-### 后端
+### 方式一：Docker 启动后端（推荐）
+
+如果本机 PHP/Composer 环境不稳定，优先使用 Docker/Podman Compose：
+
+```bash
+docker compose up --build backend
+```
+
+后端地址：`http://127.0.0.1:8000`。容器会自动安装 Composer 依赖、创建 `.env`、生成 `APP_KEY`、创建 SQLite 数据库并执行迁移和种子数据。
+
+如需重置演示数据：
+
+```bash
+docker compose exec backend php artisan migrate:fresh --seed
+```
+
+### 方式二：本机启动后端
 
 ```bash
 cd backend

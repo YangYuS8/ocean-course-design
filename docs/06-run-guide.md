@@ -12,51 +12,47 @@
 
 ## 后端启动
 
+### 推荐方式：Docker / Podman Compose
+
+本项目后端依赖 PHP 8.3+、Composer 和 SQLite 扩展。若队友环境不一致，推荐直接使用容器启动：
+
+```bash
+docker compose up --build backend
+```
+
+容器会自动完成：
+
+- 安装 Composer 依赖；
+- 创建 `.env`；
+- 生成 `APP_KEY`；
+- 创建 `database/database.sqlite`；
+- 执行 `php artisan migrate --seed`；
+- 在 `0.0.0.0:8000` 启动 Laravel。
+
+默认访问地址：`http://127.0.0.1:8000`。
+
+如果需要重置演示数据：
+
+```bash
+docker compose exec backend php artisan migrate:fresh --seed
+```
+
+### 备用方式：本机 PHP 启动
+
 进入后端目录：
 
 ```bash
 cd backend
 ```
 
-安装依赖：
+安装依赖并初始化：
 
 ```bash
 composer install
-```
-
-创建环境文件：
-
-```bash
 cp .env.example .env
-```
-
-生成应用密钥：
-
-```bash
 php artisan key:generate
-```
-
-确认 `.env` 使用 SQLite：
-
-```text
-DB_CONNECTION=sqlite
-```
-
-创建 SQLite 数据库文件：
-
-```bash
 touch database/database.sqlite
-```
-
-运行迁移和种子数据：
-
-```bash
 php artisan migrate --seed
-```
-
-启动后端服务：
-
-```bash
 php artisan serve
 ```
 

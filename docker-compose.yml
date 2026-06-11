@@ -1,0 +1,19 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: ocean-course-backend
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - backend_vendor:/app/vendor
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      DB_CONNECTION: sqlite
+    command: sh docker/start-backend.sh
+
+volumes:
+  backend_vendor:
