@@ -9,7 +9,7 @@ class DemoFlowTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_course_defense_demo_flow(): void
+    public function test_core_business_flow(): void
     {
         $this->seed();
 
@@ -31,7 +31,7 @@ class DemoFlowTest extends TestCase
             'title' => '近岸海水例行巡检',
             'area' => '东部近岸站点',
             'planned_date' => '2026-06-12',
-            'description' => '课程答辩演示用巡检任务',
+            'description' => '近岸海域例行巡检任务',
         ])->assertCreated()
             ->assertJsonPath('status', '待开始')
             ->json('id');

@@ -4,13 +4,13 @@ import { mockDashboard, mockExceptions, mockResults, mockSamples, mockTasks } fr
 import type { DashboardData, ExceptionRecord, InspectionTask, Sample, SampleResult } from '../types'
 import { getDashboardStats } from '../utils/dashboard'
 
-export function useOceanData() {
+export function useOceanData(enabled = true) {
   const [tasks, setTasks] = useState<InspectionTask[]>(mockTasks)
   const [samples, setSamples] = useState<Sample[]>(mockSamples)
   const [results, setResults] = useState<SampleResult[]>(mockResults)
   const [exceptions, setExceptions] = useState<ExceptionRecord[]>(mockExceptions)
   const [dashboard, setDashboard] = useState<DashboardData>(mockDashboard)
-  const [notice, setNotice] = useState('正在尝试连接后端接口')
+  const [notice, setNotice] = useState('正在核对连接状态')
   const [loading, setLoading] = useState(false)
   const [connected, setConnected] = useState(false)
 
@@ -33,15 +33,16 @@ export function useOceanData() {
       setNotice('后端已连接')
     } catch {
       setConnected(false)
-      setNotice('演示数据模式')
+      setNotice('本地离线模式')
     } finally {
       setLoading(false)
     }
   }, [])
 
   useEffect(() => {
+    if (!enabled) return
     void refreshAll()
-  }, [refreshAll])
+  }, [enabled, refreshAll])
 
   const stats = useMemo(
     () => getDashboardStats(dashboard, tasks, samples, results, exceptions),

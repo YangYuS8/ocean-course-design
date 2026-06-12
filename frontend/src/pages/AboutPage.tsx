@@ -2,18 +2,18 @@ import { DataCard } from '../components/ui/DataCard'
 
 export function AboutPage() {
   return (
-    <section className="page-stack">
-      <DataCard title="答辩演示流程" eyebrow="Presentation Script">
-        <ol className="guide-list">
-          <li>打开首页，说明“巡检任务 → 样本 → 结果 → 异常 → 分析 → 统计”的业务闭环。</li>
-          <li>新建并开始一个巡检任务，展示任务状态变化。</li>
-          <li>登记样本并录入检测结果，说明样本与结果的关联。</li>
-          <li>对异常指标上报异常，随后标记处理完成。</li>
-          <li>点击生成分析建议，返回首页查看统计更新。</li>
+    <section className="grid gap-6">
+      <DataCard title="系统流程" eyebrow="Workflow">
+        <ol className="grid gap-3 text-slate-700">
+          <li>1. 建立巡检任务，明确区域、时间与负责人。</li>
+          <li>2. 登记样本，关联任务并记录采样点位。</li>
+          <li>3. 录入检测指标，系统识别异常结果。</li>
+          <li>4. 上报并处理异常，沉淀处置记录。</li>
+          <li>5. 生成分析建议，回到总览页查看运行状态。</li>
         </ol>
       </DataCard>
-      <DataCard title="实现说明" eyebrow="Architecture">
-        <p className="muted-text">前端保持 React + TypeScript + Vite，没有引入复杂状态库或 UI 库；页面按业务模块拆分，接口地址可通过 VITE_API_BASE_URL 修改。</p>
+      <DataCard title="平台定位" eyebrow="Product Note">
+        <p className="leading-8 text-slate-600">平台聚焦海洋环境巡检业务链路，提供任务、样本、检测、异常、分析与用户管理能力，帮助团队以统一视图追踪现场数据与处置进展。</p>
       </DataCard>
     </section>
   )

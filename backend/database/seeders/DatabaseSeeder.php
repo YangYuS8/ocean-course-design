@@ -24,8 +24,9 @@ class DatabaseSeeder extends Seeder
         User::query()->updateOrCreate(
             ['email' => 'demo@example.com'],
             [
-                'name' => '课程演示管理员',
+                'name' => '系统管理员',
                 'password' => Hash::make('password'),
+                'role' => 'admin',
             ]
         );
 
@@ -35,7 +36,7 @@ class DatabaseSeeder extends Seeder
                 'area' => '北部港口海域',
                 'planned_date' => '2026-06-10',
                 'status' => '进行中',
-                'description' => '用于课程答辩演示的基础巡检任务。',
+                'description' => '用于海域巡检闭环管理的基础任务。',
                 'started_at' => '2026-06-10 08:30:00',
             ]
         );

@@ -71,6 +71,20 @@ export interface DashboardData {
   exceptions?: ExceptionRecord[]
 }
 
+export interface User {
+  id: number
+  name: string
+  email: string
+  role: 'admin' | 'user' | string
+  created_at?: string | null
+  updated_at?: string | null
+}
+
+export interface AuthResponse {
+  token: string
+  user: User
+}
+
 export interface OptionItem {
   id: number
   label: string
