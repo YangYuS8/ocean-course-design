@@ -1,3 +1,10 @@
+/**
+ * 登录页面。
+ *
+ * 负责收集邮箱和密码，调用 api.login() 请求 Laravel 后端。
+ * 登录成功后把 token 保存到 localStorage，并把当前用户交给 App.tsx，
+ * App.tsx 就会从登录页切换到后台主界面。
+ */
 import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { Input } from '../components/ui/FormField'
@@ -39,7 +46,7 @@ export function LoginPage({ onLogin }: { onLogin: (user: User) => void }) {
           <span className="text-xs font-black uppercase tracking-[0.18em] text-teal-700">Secure Login</span>
           <h2 className="mt-3 text-3xl font-black tracking-tight">登录管理平台</h2>
           <p className="mt-3 text-sm leading-6 text-slate-500">请使用管理员账户登录后进入工作台。</p>
-          <div className="mt-7 grid gap-4"><Input defaultValue="demo@example.com" label="邮箱" name="email" type="email" /><Input defaultValue="password" label="密码" name="password" type="password" /></div>
+          <div className="mt-7 grid gap-4"><Input defaultValue="admin@ocean.local" label="邮箱" name="email" type="email" /><Input defaultValue="password" label="密码" name="password" type="password" /></div>
           {error ? <p className="mt-4 rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p> : null}
           <button className="mt-7 w-full rounded-xl bg-slate-950 px-4 py-3 font-bold text-white transition hover:bg-teal-800" disabled={loading} type="submit">{loading ? '登录中…' : '进入系统'}</button>
         </form>

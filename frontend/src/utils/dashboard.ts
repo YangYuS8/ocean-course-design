@@ -1,3 +1,9 @@
+/**
+ * 首页数据整理工具。
+ *
+ * 后端 dashboard 接口会返回统计数据；如果某些字段缺失，这里会用列表长度做兜底，
+ * 避免页面因为 undefined 报错。
+ */
 import type { DashboardData, ExceptionRecord, InspectionTask, Sample, SampleResult } from '../types'
 
 export interface DashboardStats {
@@ -16,11 +22,11 @@ export function getDashboardStats(
   exceptions: ExceptionRecord[],
 ): DashboardStats {
   return {
-    tasks: dashboard.stats?.tasks ?? tasks.length,
-    samples: dashboard.stats?.samples ?? samples.length,
-    results: dashboard.stats?.results ?? results.length,
-    pending: dashboard.stats?.pending_exceptions ?? exceptions.filter((item) => item.status !== 'resolved').length,
-    analysis: dashboard.stats?.analysis_jobs ?? 0,
+    tasks: dashboard.statistics?.tasks_total ?? tasks.length,
+    samples: dashboard.statistics?.samples_total ?? samples.length,
+    results: dashboard.statistics?.results_total ?? results.length,
+    pending: dashboard.statistics?.open_exceptions ?? exceptions.filter((item) => item.status === '待处理').length,
+    analysis: dashboard.statistics?.analysis_total ?? 0,
   }
 }
 
@@ -29,5 +35,5 @@ export function getAbnormalResults(dashboard: DashboardData, results: SampleResu
 }
 
 export function getRecentExceptions(dashboard: DashboardData, exceptions: ExceptionRecord[]) {
-  return dashboard.exceptions ?? exceptions
+  return dashboard.recent_exceptions ?? exceptions
 }

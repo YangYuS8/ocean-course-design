@@ -1,3 +1,8 @@
+/**
+ * 页面导航配置。
+ *
+ * App.tsx 和 Sidebar.tsx 都使用这里的 pages 数组，避免菜单文字和页面 key 分散在多个文件。
+ */
 export type PageKey = 'dashboard' | 'tasks' | 'samples' | 'results' | 'exceptions' | 'users' | 'about'
 
 export interface PageMeta {

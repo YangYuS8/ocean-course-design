@@ -1,3 +1,8 @@
+/**
+ * 左侧导航栏组件。
+ *
+ * 菜单数据来自 constants/navigation.ts，点击菜单时通过 onNavigate 通知 App.tsx 切换页面。
+ */
 import type { PageKey } from '../constants/navigation'
 import { pages } from '../constants/navigation'
 import type { User } from '../types'

@@ -1,3 +1,9 @@
+/**
+ * 用户管理页面。
+ *
+ * 这是简化版账号管理界面：管理员可以创建用户、切换角色、删除用户。
+ * 具体权限判断仍由后端 UserController 完成，前端只负责展示按钮和提交请求。
+ */
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 import { api } from '../api'

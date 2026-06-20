@@ -1,3 +1,9 @@
+/**
+ * 后台主布局组件。
+ *
+ * 负责把侧边栏、顶部栏和页面内容组合起来。
+ * App.tsx 负责选择当前页面，AppLayout 负责提供统一外壳。
+ */
 import type { ReactNode } from 'react'
 import type { PageKey, PageMeta } from '../constants/navigation'
 import type { User } from '../types'

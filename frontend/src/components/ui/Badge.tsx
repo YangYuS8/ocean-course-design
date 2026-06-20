@@ -1,3 +1,9 @@
+/**
+ * 状态标签组件。
+ *
+ * 用于展示“进行中、异常、已处理、管理员”等短状态文字。
+ * tone 参数控制颜色风格，使页面状态表达保持统一。
+ */
 import type { ReactNode } from 'react'
 import { getStatusTone, statusText } from '../../constants/status'
 

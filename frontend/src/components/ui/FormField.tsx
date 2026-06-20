@@ -1,3 +1,8 @@
+/**
+ * 表单字段组件集合。
+ *
+ * Input、SelectField、TextareaField 封装了常用表单控件，统一 label、样式和属性传递。
+ */
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
 
 const controlClass = 'w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 text-sm text-slate-900 outline-none transition focus:border-teal-600 focus:bg-white focus:ring-4 focus:ring-teal-600/10'

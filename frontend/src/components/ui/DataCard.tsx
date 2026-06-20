@@ -1,3 +1,8 @@
+/**
+ * 通用卡片组件。
+ *
+ * 多个页面都需要“标题 + 小英文说明 + 内容区域”的卡片结构，抽成组件可以减少重复 JSX。
+ */
 import type { ReactNode } from 'react'
 
 export function DataCard({ title, eyebrow, children, className = '' }: { title: string; eyebrow?: string; children: ReactNode; className?: string }) {

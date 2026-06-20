@@ -1,3 +1,8 @@
+/**
+ * 顶部栏组件。
+ *
+ * 展示当前页面标题、后端连接状态、当前登录用户和退出按钮。
+ */
 import type { PageMeta } from '../constants/navigation'
 
 export function Topbar({ page, connected, loading, notice }: { page: PageMeta; connected: boolean; loading: boolean; notice: string }) {

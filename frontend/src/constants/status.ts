@@ -1,3 +1,8 @@
+/**
+ * 状态文字和颜色映射。
+ *
+ * 后端返回的状态可能是中文，也可能在某些前端旧数据中是英文；这里统一转换为适合展示的文字和颜色。
+ */
 export const statusText: Record<string, string> = {
   draft: '待开始',
   started: '进行中',

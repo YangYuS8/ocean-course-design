@@ -1,3 +1,8 @@
+/**
+ * 通用表格组件。
+ *
+ * 接收表头 headers 和行数据 rows，用于任务、样本、结果、异常、用户等列表展示。
+ */
 import type { ReactNode } from 'react'
 
 export function DataTable({ headers, rows, emptyText = '暂无数据' }: { headers: string[]; rows: ReactNode[][]; emptyText?: string }) {

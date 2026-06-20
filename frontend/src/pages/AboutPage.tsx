@@ -1,3 +1,8 @@
+/**
+ * 系统说明页面。
+ *
+ * 用真实产品说明的方式解释平台流程和定位，不出现课程设计/答辩等前端 UI 文案。
+ */
 import { DataCard } from '../components/ui/DataCard'
 
 export function AboutPage() {

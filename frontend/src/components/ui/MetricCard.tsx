@@ -1,3 +1,8 @@
+/**
+ * 首页指标卡片组件。
+ *
+ * 用于展示任务数、样本数、检测结果数、待处理异常数等关键统计指标。
+ */
 const tones = {
   teal: 'from-teal-500 to-cyan-500',
   blue: 'from-sky-500 to-blue-600',
