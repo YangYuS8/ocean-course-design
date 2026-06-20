@@ -56,7 +56,7 @@ Frontend pages:
 3. Samples
 4. Results
 5. Exceptions & Analysis
-6. Defense Guide / About
+6. About / System Guide
 
 ## Recommended Backend Tables
 
@@ -84,7 +84,11 @@ Frontend pages:
 - `POST /api/exceptions/{id}/resolve`
 - `POST /api/samples/{id}/analyze`
 
-## Defense Demonstration Flow
+## Internal Demonstration Flow
+
+Keep defense/course wording in Markdown documentation only. Do not expose words like
+"course design", "defense", "demo", or "presentation" in the frontend UI; the
+frontend should look like a real ocean inspection management product.
 
 1. Open dashboard and explain the business chain.
 2. Start an inspection task.
