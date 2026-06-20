@@ -6,8 +6,15 @@ use App\Models\InspectionTask;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * 巡检任务控制器。
+ *
+ * Controller（控制器）负责接收 HTTP 请求、校验表单数据、调用模型读写数据库，
+ * 最后返回 JSON 给前端。这里体现了 PHP Web 开发中的“路由 -> 控制器 -> 模型 -> 数据库”流程。
+ */
 class TaskController extends Controller
 {
+    /** 查询任务列表，并附带每个任务下面的样本数量。 */
     public function index(): JsonResponse
     {
         return response()->json(
@@ -15,11 +22,14 @@ class TaskController extends Controller
         );
     }
 
+    /** 新建巡检任务。 */
     public function store(Request $request): JsonResponse
     {
+        // validate 会自动检查请求参数；不符合规则时 Laravel 会返回 422 JSON 错误。
         $data = $request->validate([
             'title' => ['required', 'string', 'max:120'],
             'area' => ['required', 'string', 'max:120'],
+            'inspector' => ['required', 'string', 'max:60'],
             'planned_date' => ['required', 'date'],
             'description' => ['nullable', 'string'],
         ]);
@@ -29,8 +39,10 @@ class TaskController extends Controller
         return response()->json($task->refresh(), 201);
     }
 
+    /** 将任务状态改为进行中。 */
     public function start(InspectionTask $task): JsonResponse
     {
+        // 路由模型绑定会根据 {task} 自动查询 InspectionTask，找不到时返回 404。
         $task->update([
             'status' => '进行中',
             'started_at' => now(),
@@ -39,6 +51,7 @@ class TaskController extends Controller
         return response()->json($task->fresh());
     }
 
+    /** 提交任务，表示本次巡检流程已完成录入。 */
     public function submit(InspectionTask $task): JsonResponse
     {
         $task->update([

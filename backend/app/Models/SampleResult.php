@@ -6,10 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * 检测结果模型，对应 sample_results 表。
+ *
+ * 每条记录表示某个样本的一项检测指标，例如 pH、溶解氧、氨氮等。
+ */
 class SampleResult extends Model
 {
     use HasFactory;
 
+    /** 检测结果允许写入的字段。 */
     protected $fillable = [
         'sample_id',
         'indicator',
@@ -22,6 +28,7 @@ class SampleResult extends Model
         'tester',
     ];
 
+    /** 类型转换：数值转 float，异常标记转 boolean，检测时间转日期时间。 */
     protected function casts(): array
     {
         return [
@@ -33,6 +40,7 @@ class SampleResult extends Model
         ];
     }
 
+    /** 反向一对多：一条检测结果属于一个样本。 */
     public function sample(): BelongsTo
     {
         return $this->belongsTo(Sample::class);

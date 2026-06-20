@@ -9,6 +9,7 @@ use App\Models\SampleException;
 use App\Models\SampleResult;
 use Illuminate\Http\JsonResponse;
 
+/** 首页统计控制器：把多个表的关键数据汇总给前端仪表盘。 */
 class DashboardController extends Controller
 {
     public function show(): JsonResponse
@@ -24,7 +25,16 @@ class DashboardController extends Controller
                 'analysis_total' => AnalysisJob::count(),
             ],
             'recent_tasks' => InspectionTask::latest()->limit(5)->get(),
+            'abnormal_results' => SampleResult::with('sample:id,code,location')
+                ->where('is_abnormal', true)
+                ->latest()
+                ->limit(5)
+                ->get(),
             'recent_exceptions' => SampleException::with('sample:id,code,location')
+                ->latest()
+                ->limit(5)
+                ->get(),
+            'recent_analyses' => AnalysisJob::with('sample:id,code,location')
                 ->latest()
                 ->limit(5)
                 ->get(),

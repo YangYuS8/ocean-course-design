@@ -12,17 +12,20 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * 数据填充器。
+ *
+ * Seeder 用来准备一套稳定的初始数据，方便本地运行、课堂讲解和自动化测试。
+ * updateOrCreate / firstOrCreate 可以避免重复执行 seed 时产生大量重复数据。
+ */
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         User::query()->updateOrCreate(
-            ['email' => 'demo@example.com'],
+            ['email' => 'admin@ocean.local'],
             [
                 'name' => '系统管理员',
                 'password' => Hash::make('password'),
@@ -34,9 +37,10 @@ class DatabaseSeeder extends Seeder
             ['title' => '港口近岸水质巡检'],
             [
                 'area' => '北部港口海域',
+                'inspector' => '张海宁',
                 'planned_date' => '2026-06-10',
                 'status' => '进行中',
-                'description' => '用于海域巡检闭环管理的基础任务。',
+                'description' => '面向港口近岸海域的水质巡检任务，重点关注 pH、溶解氧和氨氮指标。',
                 'started_at' => '2026-06-10 08:30:00',
             ]
         );
@@ -47,8 +51,8 @@ class DatabaseSeeder extends Seeder
                 'inspection_task_id' => $task->id,
                 'location' => '港口一号采样点',
                 'collected_at' => '2026-06-10 09:00:00',
-                'collector' => '学生A',
-                'water_type' => '海水',
+                'collector' => '李珊',
+                'water_type' => '近岸海水',
                 'status' => '已检测',
                 'notes' => '天气晴，海面平稳。',
             ]
@@ -60,8 +64,8 @@ class DatabaseSeeder extends Seeder
                 'inspection_task_id' => $task->id,
                 'location' => '排水口附近采样点',
                 'collected_at' => '2026-06-10 09:40:00',
-                'collector' => '学生B',
-                'water_type' => '海水',
+                'collector' => '王越',
+                'water_type' => '近岸海水',
                 'status' => '异常待处理',
                 'notes' => '水体有轻微异味。',
             ]
@@ -73,7 +77,7 @@ class DatabaseSeeder extends Seeder
                 'inspection_task_id' => $task->id,
                 'location' => '外海对照采样点',
                 'collected_at' => '2026-06-10 10:05:00',
-                'collector' => '学生A',
+                'collector' => '陈一鸣',
                 'water_type' => '海水',
                 'status' => '已登记',
                 'notes' => '等待检测结果录入。',
@@ -89,7 +93,7 @@ class DatabaseSeeder extends Seeder
                 'standard_max' => 8.5,
                 'is_abnormal' => false,
                 'tested_at' => '2026-06-10 10:20:00',
-                'tester' => '学生C',
+                'tester' => '陈一鸣',
             ]
         );
 
@@ -102,7 +106,7 @@ class DatabaseSeeder extends Seeder
                 'standard_max' => null,
                 'is_abnormal' => false,
                 'tested_at' => '2026-06-10 10:35:00',
-                'tester' => '学生C',
+                'tester' => '陈一鸣',
             ]
         );
 
@@ -115,7 +119,7 @@ class DatabaseSeeder extends Seeder
                 'standard_max' => 1.0,
                 'is_abnormal' => true,
                 'tested_at' => '2026-06-10 11:00:00',
-                'tester' => '学生D',
+                'tester' => '陈一鸣',
             ]
         );
 
@@ -132,7 +136,7 @@ class DatabaseSeeder extends Seeder
             ['sample_id' => $normalSample->id],
             [
                 'status' => '已完成',
-                'summary' => '样本 S-20260610-001 共录入 2 项检测结果，异常指标 0 项。',
+                'summary' => '样本 S-20260610-001 共录入 2 项检测结果，异常指标 0 项，待处理异常 0 条。',
                 'suggestion' => '检测结果处于参考范围内，建议保持常规巡检频次。',
             ]
         );
