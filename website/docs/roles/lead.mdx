@@ -28,7 +28,11 @@ backend/app/Models/*.php
 backend/database/migrations/*.php
 frontend/src/api.ts
 frontend/src/hooks/useOceanData.ts
+frontend/src/pages/SamplesPage.tsx
+frontend/src/pages/DashboardPage.tsx
 ```
+
+本次增强后的样本详情、首页近期分析建议、分析报告摘要展示，属于较难的前后端集成点，统一归你负责。其他组员只需要知道这些功能有什么用，不需要深入讲 React 状态和接口刷新。
 
 ## 你要讲的主线
 
@@ -60,10 +64,12 @@ flowchart LR
 - 数据库表之间是什么关系？
 - 如何证明项目不是静态页面？
 - 前端点击按钮后 PHP 后端发生了什么？
+- 样本详情为什么能展示任务、检测结果、异常记录和分析报告？
+- `report_summary` 和普通 `summary`、`suggestion` 有什么区别？
 
 ## 你的必背说法
 
-> 我负责 PHP 后端总体架构和前后端集成。项目使用 Laravel 的路由、中间件、控制器、模型和迁移组织后端代码；前端通过 api.ts 请求 `/api/*` 接口，后端校验后写入 SQLite，再返回 JSON 刷新页面。
+> 我负责 PHP 后端总体架构和前后端集成。项目使用 Laravel 的路由、中间件、控制器、模型和迁移组织后端代码；前端通过 api.ts 请求 `/api/*` 接口，后端校验后写入 SQLite，再返回 JSON 刷新页面。样本详情和首页近期分析建议是我负责兜底的集成点。
 
 ## 如果老师追问
 

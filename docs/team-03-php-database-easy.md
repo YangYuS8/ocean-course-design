@@ -117,7 +117,7 @@ php artisan migrate:fresh --seed
 
 - token 中间件如何校验。
 - 检测结果如何自动生成异常。
-- AnalysisController 如何生成建议。
+- AnalysisController 如何生成建议和报告摘要。
 - 前端怎么调用接口。
 - 完整 Laravel 生命周期。
 

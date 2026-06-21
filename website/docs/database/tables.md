@@ -48,6 +48,8 @@ description: 用清楚的语言解释 users、inspection_tasks、samples、sampl
 - `location`：采样点位。
 - `collector`：采样人。
 - `collected_at`：采样时间。
+- `weather`：现场天气。
+- `coordinate`：采样坐标。
 
 ## 4. sample_results 检测结果表
 
@@ -87,7 +89,8 @@ description: 用清楚的语言解释 users、inspection_tasks、samples、sampl
 - `sample_id`：属于哪个样本。
 - `summary`：分析摘要。
 - `suggestion`：处理建议。
+- `report_summary`：样本详情页展示的报告摘要。
 
 ## 必背说法
 
-> 本项目数据库围绕“任务和样本”设计。任务下面有样本，样本下面有检测结果、异常记录和分析建议。
+> 本项目数据库围绕“任务和样本”设计。任务下面有样本，样本保存天气和坐标等现场信息；样本下面有检测结果、异常记录和分析建议，分析记录里还保存报告摘要。

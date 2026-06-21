@@ -27,6 +27,8 @@ Chinese explanation:
 巡检任务 -> 样本登记 -> 检测结果录入 -> 异常上报处理 -> 简单分析建议 -> 首页统计
 ```
 
+Samples should retain lightweight field-work realism from the original design: record weather and coordinate, expose a sample detail view, and show generated analysis report summaries. Do not add heavy media upload, object storage, Python workers, or real AI recognition for this course version.
+
 ## Keep
 
 - Laravel routes/controllers/models/migrations/seeders.
@@ -57,6 +59,8 @@ Frontend pages:
 4. Results
 5. Exceptions & Analysis
 6. About / System Guide
+
+Samples page should include a detail panel showing the selected sample, results, exceptions, and analysis report summaries. Dashboard should show recent analysis suggestions, not only counters.
 
 ## Recommended Backend Tables
 
