@@ -5,6 +5,7 @@
  * 是否异常不由前端决定，而是提交给后端 ResultController，由 PHP 根据 standard_min / standard_max 统一判断。
  */
 import type { FormEvent } from 'react'
+import { useState } from 'react'
 import { Badge } from '../components/ui/Badge'
 import { DataCard } from '../components/ui/DataCard'
 import { DataTable } from '../components/ui/DataTable'
@@ -13,14 +14,27 @@ import { api } from '../api'
 import type { Sample, SampleResult } from '../types'
 
 export function ResultsPage({ results, samples, onChanged }: { results: SampleResult[]; samples: Sample[]; onChanged: () => Promise<void> }) {
+  const [notice, setNotice] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const form = new FormData(event.currentTarget)
-    const sampleId = Number(form.get('sample_id'))
-    form.delete('sample_id')
-    await api.addResult(sampleId, Object.fromEntries(form.entries()))
-    event.currentTarget.reset()
-    await onChanged()
+    const formElement = event.currentTarget
+    setSubmitting(true)
+    setNotice('')
+    try {
+      const form = new FormData(formElement)
+      const sampleId = Number(form.get('sample_id'))
+      form.delete('sample_id')
+      const result = await api.addResult(sampleId, Object.fromEntries(form.entries()))
+      formElement.reset()
+      await onChanged()
+      setNotice(`已保存检测结果：${result.indicator}，判断结果为${result.is_abnormal ? '异常' : '正常'}。`)
+    } catch (e) {
+      setNotice(e instanceof Error ? e.message : '检测结果保存失败')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -35,7 +49,8 @@ export function ResultsPage({ results, samples, onChanged }: { results: SampleRe
           <Input name="standard_max" label="参考上限" placeholder="8.5" type="number" step="0.01" />
           <Input name="tested_at" label="检测时间" required type="datetime-local" />
           <Input name="tester" label="检测人" required placeholder="陈一鸣" />
-          <button className="primary-button" type="submit">保存结果</button>
+          <button className="primary-button" disabled={submitting} type="submit">{submitting ? '保存中…' : '保存结果'}</button>
+          {notice ? <p className="rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-800">{notice}</p> : null}
         </form>
       </DataCard>
       <DataCard title="结果列表" eyebrow="Indicators">

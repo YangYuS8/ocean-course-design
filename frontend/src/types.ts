@@ -27,10 +27,15 @@ export interface Sample {
   location: string
   collector?: string | null
   water_type?: string | null
+  weather?: string | null
+  coordinate?: string | null
   status?: string | null
   notes?: string | null
   collected_at?: string | null
   task?: InspectionTask
+  results?: SampleResult[]
+  exceptions?: ExceptionRecord[]
+  analyses?: AnalysisJob[]
 }
 
 export interface SampleResult {
@@ -65,6 +70,7 @@ export interface AnalysisJob {
   status: string
   summary?: string | null
   suggestion?: string | null
+  report_summary?: string | null
   created_at?: string | null
   sample?: Sample
 }

@@ -97,6 +97,7 @@ export const api = {
   startTask: (id: number) => request<InspectionTask>(`/tasks/${id}/start`, { method: 'POST' }),
   submitTask: (id: number) => request<InspectionTask>(`/tasks/${id}/submit`, { method: 'POST' }),
   getSamples: async () => unwrapList(await request<Sample[] | { data?: Sample[] }>('/samples')),
+  getSample: (id: number) => request<Sample>(`/samples/${id}`),
   createSample: (data: JsonValue) => request<Sample>('/samples', { method: 'POST', body: JSON.stringify(data) }),
   getResults: async () => unwrapList(await request<SampleResult[] | { data?: SampleResult[] }>('/results')),
   addResult: (sampleId: number, data: JsonValue) =>

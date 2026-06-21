@@ -37,3 +37,7 @@ export function getAbnormalResults(dashboard: DashboardData, results: SampleResu
 export function getRecentExceptions(dashboard: DashboardData, exceptions: ExceptionRecord[]) {
   return dashboard.recent_exceptions ?? exceptions
 }
+
+export function getRecentAnalyses(dashboard: DashboardData) {
+  return dashboard.recent_analyses ?? []
+}
