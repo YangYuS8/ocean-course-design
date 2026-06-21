@@ -1,0 +1,33 @@
+{
+  "zh-CN": {
+    "languagesText": "语言",
+    "themeText": "主题",
+    "versionsText": "版本",
+    "menuTitle": "菜单",
+    "outlineTitle": "本页目录",
+    "scrollToTopText": "回到顶部",
+    "lastUpdatedText": "最后更新",
+    "prevPageText": "上一页",
+    "nextPageText": "下一页",
+    "sourceCodeText": "源代码",
+    "searchPlaceholderText": "搜索文档",
+    "searchPanelCancelText": "取消",
+    "searchNoResultsText": "没有找到结果",
+    "searchSuggestedQueryText": "建议查询",
+    "overview.filterNameText": "筛选",
+    "overview.filterPlaceholderText": "输入关键词",
+    "overview.filterNoResultText": "没有匹配结果",
+    "openInText": "打开于",
+    "copyMarkdownText": "复制 Markdown",
+    "copyMarkdownLinkText": "复制 Markdown 链接",
+    "editLinkText": "编辑此页",
+    "codeButtonGroupCopyButtonText": "复制代码",
+    "codeButtonGroupWrapButtonText": "自动换行",
+    "notFoundText": "页面不存在",
+    "takeMeHomeText": "返回首页",
+    "promptCopyText": "复制提示词",
+    "promptCopiedText": "已复制",
+    "promptExpandText": "展开",
+    "promptCollapseText": "收起"
+  }
+}

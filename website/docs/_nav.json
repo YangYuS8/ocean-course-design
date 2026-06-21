@@ -1,0 +1,32 @@
+[
+  {
+    "text": "项目总览",
+    "link": "/overview/project-flow",
+    "activeMatch": "/overview/"
+  },
+  {
+    "text": "PHP 基础",
+    "link": "/php-basics/syntax",
+    "activeMatch": "/php-basics/"
+  },
+  {
+    "text": "Laravel 后端",
+    "link": "/laravel/backend-map",
+    "activeMatch": "/laravel/"
+  },
+  {
+    "text": "前端集成",
+    "link": "/frontend/api-flow",
+    "activeMatch": "/frontend/"
+  },
+  {
+    "text": "分工讲稿",
+    "link": "/team/role-1-lead",
+    "activeMatch": "/team/"
+  },
+  {
+    "text": "答辩演练",
+    "link": "/defense/faq",
+    "activeMatch": "/defense/"
+  }
+]
