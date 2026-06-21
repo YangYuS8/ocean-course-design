@@ -26,11 +26,13 @@ class AnalysisController extends Controller
 
         $summary = "样本 {$sample->code} 共录入 {$sample->results->count()} 项检测结果，异常指标 {$abnormalCount} 项，待处理异常 {$openExceptionCount} 条。";
         $suggestion = $this->suggestion($abnormalCount, $openExceptionCount);
+        $reportSummary = $this->reportSummary($sample, $abnormalCount, $openExceptionCount);
 
         $analysis = $sample->analyses()->create([
             'status' => '已完成',
             'summary' => $summary,
             'suggestion' => $suggestion,
+            'report_summary' => $reportSummary,
         ]);
 
         return response()->json($analysis->load('sample:id,code,location'), 201);
@@ -48,5 +50,19 @@ class AnalysisController extends Controller
         }
 
         return '检测结果处于参考范围内，建议保持常规巡检频次。';
+    }
+
+    /**
+     * 生成结构化报告摘要。
+     *
+     * 原版系统有报告导出和归档能力，课程简化版不引入 PDF/Word 生成库，
+     * 但保留“报告摘要”这个轻量出口，让样本详情页能展示分析产出。
+     */
+    private function reportSummary(Sample $sample, int $abnormalCount, int $openExceptionCount): string
+    {
+        $weather = $sample->weather ?: '未记录';
+        $coordinate = $sample->coordinate ?: '未记录';
+
+        return "样本 {$sample->code}｜采样点：{$sample->location}｜采样人：{$sample->collector}｜天气：{$weather}｜坐标：{$coordinate}｜检测项：{$sample->results->count()}｜异常项：{$abnormalCount}｜待处理异常：{$openExceptionCount}";
     }
 }

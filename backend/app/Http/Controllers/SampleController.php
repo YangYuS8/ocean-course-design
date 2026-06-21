@@ -27,6 +27,8 @@ class SampleController extends Controller
             'collected_at' => ['required', 'date'],
             'collector' => ['required', 'string', 'max:60'],
             'water_type' => ['nullable', 'string', 'max:60'],
+            'weather' => ['nullable', 'string', 'max:60'],
+            'coordinate' => ['nullable', 'string', 'max:120'],
             'notes' => ['nullable', 'string'],
         ]);
 

@@ -21,6 +21,7 @@ class AnalysisJob extends Model
         'status',
         'summary',
         'suggestion',
+        'report_summary',
     ];
 
     /** 反向一对多：一条分析记录属于一个样本。 */

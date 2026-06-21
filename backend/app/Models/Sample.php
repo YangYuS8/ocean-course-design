@@ -24,6 +24,8 @@ class Sample extends Model
         'collected_at',
         'collector',
         'water_type',
+        'weather',
+        'coordinate',
         'status',
         'notes',
     ];

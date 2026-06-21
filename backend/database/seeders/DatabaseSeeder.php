@@ -53,6 +53,8 @@ class DatabaseSeeder extends Seeder
                 'collected_at' => '2026-06-10 09:00:00',
                 'collector' => '李珊',
                 'water_type' => '近岸海水',
+                'weather' => '晴',
+                'coordinate' => '121.61,38.94',
                 'status' => '已检测',
                 'notes' => '天气晴，海面平稳。',
             ]
@@ -66,6 +68,8 @@ class DatabaseSeeder extends Seeder
                 'collected_at' => '2026-06-10 09:40:00',
                 'collector' => '王越',
                 'water_type' => '近岸海水',
+                'weather' => '多云',
+                'coordinate' => '121.58,38.91',
                 'status' => '异常待处理',
                 'notes' => '水体有轻微异味。',
             ]
@@ -79,6 +83,8 @@ class DatabaseSeeder extends Seeder
                 'collected_at' => '2026-06-10 10:05:00',
                 'collector' => '陈一鸣',
                 'water_type' => '海水',
+                'weather' => '晴',
+                'coordinate' => '121.72,38.88',
                 'status' => '已登记',
                 'notes' => '等待检测结果录入。',
             ]
@@ -138,6 +144,7 @@ class DatabaseSeeder extends Seeder
                 'status' => '已完成',
                 'summary' => '样本 S-20260610-001 共录入 2 项检测结果，异常指标 0 项，待处理异常 0 条。',
                 'suggestion' => '检测结果处于参考范围内，建议保持常规巡检频次。',
+                'report_summary' => '样本 S-20260610-001｜采样点：港口一号采样点｜采样人：李珊｜天气：晴｜坐标：121.61,38.94｜检测项：2｜异常项：0｜待处理异常：0',
             ]
         );
     }

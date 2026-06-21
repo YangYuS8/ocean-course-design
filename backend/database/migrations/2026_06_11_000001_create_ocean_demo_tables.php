@@ -40,6 +40,8 @@ return new class extends Migration
             $table->timestamp('collected_at'); // 采样时间
             $table->string('collector'); // 采样人
             $table->string('water_type')->default('海水'); // 水体类型
+            $table->string('weather')->nullable(); // 现场天气，保留原版“环境参数”的轻量表达
+            $table->string('coordinate')->nullable(); // 采样坐标，保留原版“定位采样”的轻量表达
             $table->string('status')->default('已登记'); // 样本状态
             $table->text('notes')->nullable(); // 现场备注
             $table->timestamps();
@@ -80,6 +82,7 @@ return new class extends Migration
             $table->string('status')->default('已完成');
             $table->text('summary'); // 分析摘要
             $table->text('suggestion'); // 处置建议
+            $table->text('report_summary')->nullable(); // 面向样本详情页展示的结构化报告摘要
             $table->timestamps();
         });
     }

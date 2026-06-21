@@ -71,9 +71,13 @@ class DemoFlowTest extends TestCase
             'collected_at' => '2026-06-12 09:30:00',
             'collector' => '李珊',
             'water_type' => '海水',
+            'weather' => '多云',
+            'coordinate' => '121.48,38.92',
             'notes' => '水体略浑浊',
         ])->assertCreated()
             ->assertJsonPath('status', '已登记')
+            ->assertJsonPath('weather', '多云')
+            ->assertJsonPath('coordinate', '121.48,38.92')
             ->json('id');
 
         $this->withHeaders($headers)->postJson("/api/samples/{$sampleId}/results", [
@@ -108,7 +112,14 @@ class DemoFlowTest extends TestCase
         $this->withHeaders($headers)->postJson("/api/samples/{$sampleId}/analyze")
             ->assertCreated()
             ->assertJsonPath('status', '已完成')
-            ->assertJsonPath('suggestion', '样本存在待处理异常，建议先完成异常处置，再安排复测确认。');
+            ->assertJsonPath('suggestion', '样本存在待处理异常，建议先完成异常处置，再安排复测确认。')
+            ->assertJsonPath('report_summary', "样本 S-DEMO-001｜采样点：一号采样点｜采样人：李珊｜天气：多云｜坐标：121.48,38.92｜检测项：1｜异常项：1｜待处理异常：1");
+
+        $this->withHeaders($headers)->getJson("/api/samples/{$sampleId}")
+            ->assertOk()
+            ->assertJsonPath('weather', '多云')
+            ->assertJsonPath('coordinate', '121.48,38.92')
+            ->assertJsonPath('analyses.0.report_summary', "样本 S-DEMO-001｜采样点：一号采样点｜采样人：李珊｜天气：多云｜坐标：121.48,38.92｜检测项：1｜异常项：1｜待处理异常：1");
 
         $this->withHeaders($headers)->postJson("/api/tasks/{$taskId}/submit")
             ->assertOk()
