@@ -3,7 +3,7 @@ import { defineConfig } from '@rspress/core';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
-  lang: 'zh-CN',
+  lang: 'zh',
   title: 'Ocean 课程设计补课站',
   description: '面向 Ocean 课程设计小组的 PHP/Laravel、前端集成与答辩补课文档。',
   icon: '/rspress-icon.png',
@@ -12,6 +12,7 @@ export default defineConfig({
     dark: '/rspress-dark-logo.png',
   },
   base: '/ocean-course-design/',
+  llms: true,
   themeConfig: {
     enableContentAnimation: true,
     socialLinks: [

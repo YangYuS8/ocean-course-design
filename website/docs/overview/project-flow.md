@@ -1,41 +1,48 @@
-# 项目总览：系统是怎么跑起来的
+---
+title: 项目总览：一条业务线看懂项目
+description: 用巡检任务、样本、检测结果、异常和分析建议解释 Ocean 项目的业务流程。
+---
 
-## 一句话介绍
+# 项目总览：一条业务线看懂项目
 
-本项目是一个海洋环境巡检管理系统，使用 React 前端和 PHP/Laravel 后端实现。用户可以创建巡检任务、登记样本、录入检测结果、处理异常，并在首页查看统计数据和分析建议。
+先不要急着看代码。先把业务看懂。
 
-## 业务流程
+## 这个系统解决什么问题？
 
-```mermaid
-flowchart LR
-  Task[巡检任务] --> Sample[样本登记]
-  Sample --> Result[检测结果]
-  Result --> Exception[异常处理]
-  Exception --> Analysis[分析建议]
-  Analysis --> Dashboard[首页统计]
+假设我们去海边或港口做水质巡检，需要记录：
+
+- 这次巡检叫什么？谁负责？在哪里？
+- 采了哪些水样？样本编号是什么？
+- 每个水样检测了哪些指标？数值是多少？
+- 有没有超标？
+- 超标后怎么处理？
+- 最后系统能不能给一个简单建议？
+
+所以项目设计成这条链：
+
+```text
+巡检任务 -> 样本登记 -> 检测结果 -> 异常处理 -> 分析建议 -> 首页统计
 ```
 
-## 技术流程
+## 对应到项目页面
 
-```mermaid
-flowchart LR
-  UI[React 页面] --> API[api.ts]
-  API --> Route[Laravel routes/api.php]
-  Route --> Middleware[RequireApiToken 中间件]
-  Middleware --> Controller[Controller 控制器]
-  Controller --> Model[Eloquent Model]
-  Model --> DB[(SQLite 数据库)]
-```
+| 业务动作 | 前端页面 | 后端接口 | 数据表 |
+| --- | --- | --- | --- |
+| 创建巡检任务 | 巡检任务 | `/api/tasks` | `inspection_tasks` |
+| 登记样本 | 样本管理 | `/api/samples` | `samples` |
+| 录入检测结果 | 检测结果 | `/api/samples/{id}/results` | `sample_results` |
+| 生成/处理异常 | 异常分析 | `/api/exceptions` | `exceptions` |
+| 生成分析建议 | 异常分析 | `/api/samples/{id}/analyze` | `analysis_jobs` |
+| 查看统计 | 运营总览 | `/api/dashboard` | 多张表统计 |
 
-## 你需要记住的主线
+## 一句话讲给老师听
 
-1. 前端页面负责展示和收集表单。
-2. `api.ts` 把表单数据发送到 Laravel 后端。
-3. `routes/api.php` 把请求分发给控制器。
-4. 控制器校验数据并调用模型。
-5. 模型读写 SQLite 数据库。
-6. 后端返回 JSON，前端刷新页面。
+> 我们做的是一个海洋巡检管理系统，数据从巡检任务开始，经过样本、检测结果、异常处理和分析建议，最后在首页统计形成闭环。
 
-## 答辩时可以这样说
+## 你要记住的关键词
 
-> 我们的项目不是静态页面，而是一个前后端分离的管理系统。前端通过 API 调用 PHP/Laravel 后端，后端使用模型操作 SQLite 数据库，完成从巡检任务到样本、检测结果、异常处理和首页统计的闭环。
+- 任务：一次巡检计划。
+- 样本：这次巡检采到的一份水样。
+- 检测结果：样本的某个指标数值。
+- 异常：指标超出参考范围或人工上报的问题。
+- 分析建议：系统根据异常情况生成的处理建议。

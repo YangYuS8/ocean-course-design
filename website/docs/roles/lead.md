@@ -1,0 +1,84 @@
+---
+title: 杨栋森：PHP 总体架构与前后端集成
+description: 给项目主负责人准备的学习路线，重点掌握 Laravel 总体结构、接口入口、数据库关系和兜底问题。
+---
+
+# 杨栋森：PHP 总体架构与前后端集成
+
+你的角色不是“只做前端”。你要负责把项目讲成一个完整系统。
+
+## 你要掌握的范围
+
+你需要能串起来：
+
+```text
+前端页面 -> api.ts -> routes/api.php -> 中间件 -> Controller -> Model -> SQLite
+```
+
+重点文件：
+
+```text
+backend/routes/api.php
+backend/bootstrap/app.php
+backend/app/Http/Middleware/RequireApiToken.php
+backend/app/Http/Controllers/*.php
+backend/app/Models/*.php
+backend/database/migrations/*.php
+frontend/src/api.ts
+frontend/src/hooks/useOceanData.ts
+```
+
+## 你要讲的主线
+
+### 1. 项目怎么分层
+
+大白话：
+
+> 前端负责展示和提交，PHP 后端负责校验和业务判断，数据库负责保存数据。
+
+### 2. 请求怎么流动
+
+```mermaid
+flowchart LR
+  F[前端页面] --> A[api.ts]
+  A --> R[routes/api.php]
+  R --> M[RequireApiToken]
+  M --> C[Controller]
+  C --> O[Model]
+  O --> D[(SQLite)]
+```
+
+### 3. 你要兜底的后端问题
+
+你不一定逐行讲所有控制器，但老师问到这些，你要能接住：
+
+- 为什么要有路由？
+- 为什么要有中间件？
+- 为什么检测异常放后端判断？
+- 数据库表之间是什么关系？
+- 如何证明项目不是静态页面？
+- 前端点击按钮后 PHP 后端发生了什么？
+
+## 你的必背说法
+
+> 我负责 PHP 后端总体架构和前后端集成。项目使用 Laravel 的路由、中间件、控制器、模型和迁移组织后端代码；前端通过 api.ts 请求 `/api/*` 接口，后端校验后写入 SQLite，再返回 JSON 刷新页面。
+
+## 如果老师追问
+
+### 问：你负责 PHP 哪一块？
+
+答：
+
+> 我负责整体后端架构、API 入口、中间件和数据库关系统筹，并负责把前端页面和 PHP 后端接口打通。
+
+### 问：你是不是只做前端？
+
+答：
+
+> 不是。前端是展示和操作入口，我还负责解释请求如何进入 Laravel 后端，以及后端如何通过路由、中间件、控制器和模型完成业务闭环。
+
+### 问：为什么不用纯 PHP？
+
+答：
+
+> Laravel 是 PHP 框架，它把路由、控制器、模型、数据库迁移这些常见功能规范化，适合做一个结构清晰的课程设计项目。
