@@ -1,0 +1,21 @@
+.mermaid-wrapper {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--rp-c-divider);
+  border-radius: 12px;
+  background: var(--rp-c-bg-soft);
+}
+
+.mermaid-wrapper svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.mermaid-error {
+  margin-top: 0.75rem;
+  color: var(--rp-c-danger);
+  white-space: pre-wrap;
+}

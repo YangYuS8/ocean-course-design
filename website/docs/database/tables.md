@@ -1,6 +1,6 @@
 ---
 title: 项目有哪些数据库表
-description: 用大白话解释 users、inspection_tasks、samples、sample_results、exceptions、analysis_jobs 六张表。
+description: 用清楚的语言解释 users、inspection_tasks、samples、sample_results、exceptions、analysis_jobs 六张表。
 ---
 
 # 项目有哪些数据库表

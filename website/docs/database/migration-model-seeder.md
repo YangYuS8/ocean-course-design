@@ -1,11 +1,11 @@
 ---
 title: migration、model、seeder 是什么
-description: 用大白话解释 Laravel 数据库相关的三个核心概念。
+description: 用清楚的语言解释 Laravel 数据库相关的三个核心概念。
 ---
 
 # migration、model、seeder 是什么
 
-这三个词很常见，先用大白话记。
+这三个词很常见，先记住核心理解。
 
 ## migration：建表图纸
 
@@ -24,7 +24,7 @@ migration 负责定义数据库表长什么样。
 - 字段是字符串、数字还是日期。
 - 有没有外键。
 
-大白话：
+简单理解：
 
 > migration 就是数据库表的设计图。
 
@@ -46,7 +46,7 @@ InspectionTask::create($data);
 
 意思是往任务表新增一条数据。
 
-大白话：
+简单理解：
 
 > model 就是数据库表在 PHP 代码里的代表。
 
@@ -68,7 +68,7 @@ Seeder 负责生成一批初始数据。
 - 示例检测结果。
 - 示例异常。
 
-大白话：
+简单理解：
 
 > seeder 就是给系统准备演示数据的工具。
 

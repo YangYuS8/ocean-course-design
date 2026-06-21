@@ -9,7 +9,8 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "@rspress/core": "^2.0.13"
+    "@rspress/core": "^2.0.13",
+    "mermaid": "^11.12.2"
   },
   "devDependencies": {
     "@types/node": "^22.8.1",

@@ -5,7 +5,7 @@ description: 用本项目 AuthController 和 RequireApiToken 解释登录、toke
 
 # 登录 token 是什么
 
-## 先用大白话讲
+## 先讲核心理解
 
 登录 token 就像一张临时通行证。
 

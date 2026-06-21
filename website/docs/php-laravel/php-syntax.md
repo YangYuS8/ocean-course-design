@@ -26,7 +26,7 @@ $data = $request->validate([...]);
 $user = User::query()->where('email', $data['email'])->first();
 ```
 
-大白话：
+简单理解：
 
 - `$data`：保存表单校验后的数据。
 - `$user`：保存从数据库查出来的用户。
@@ -58,7 +58,7 @@ class TaskController extends Controller
 }
 ```
 
-大白话：
+简单理解：
 
 > 类就是把一组相关功能放在一起的代码盒子。
 
@@ -73,7 +73,7 @@ public function index(): JsonResponse
 }
 ```
 
-大白话：
+简单理解：
 
 - `function index()`：定义一个叫 index 的方法。
 - `public`：这个方法可以被外部调用。
@@ -87,7 +87,7 @@ if ($max !== null && $value > $max) {
 }
 ```
 
-大白话：
+简单理解：
 
 > 如果设置了上限，并且检测值大于上限，就返回 true，表示异常。
 
@@ -102,7 +102,7 @@ use App\Models\Sample;
 use Illuminate\Http\Request;
 ```
 
-大白话：
+简单理解：
 
 - `namespace`：说明当前文件属于哪个目录空间。
 - `use`：引入别的类，当前文件才能直接用它。

@@ -1,7 +1,9 @@
 ---
 title: 网页、PHP 后端、数据库怎么配合
-description: 用大白话解释前端、后端、数据库在本项目里的分工。
+description: 用清楚的语言解释前端、后端、数据库在本项目里的分工。
 ---
+
+import { Mermaid } from '../../theme/components/Mermaid';
 
 # 网页、PHP 后端、数据库怎么配合
 
@@ -63,7 +65,7 @@ backend/database/database.sqlite
 
 ## 一次“新建任务”发生了什么？
 
-```mermaid
+<Mermaid chart={`
 sequenceDiagram
   participant U as 用户
   participant F as 前端页面
@@ -77,7 +79,7 @@ sequenceDiagram
   D-->>B: 返回新任务
   B-->>F: 返回 JSON
   F-->>U: 页面刷新任务列表
-```
+`} />
 
 ## 最重要的一句话
 

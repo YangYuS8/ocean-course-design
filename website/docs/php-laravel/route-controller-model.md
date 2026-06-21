@@ -25,7 +25,7 @@ backend/routes/api.php
 Route::get('/tasks', [TaskController::class, 'index']);
 ```
 
-大白话：
+简单理解：
 
 > 如果前端访问 `/api/tasks`，就让 `TaskController` 的 `index()` 方法处理。
 
@@ -60,7 +60,7 @@ return response()->json($task, 201);
 backend/app/Models/InspectionTask.php
 ```
 
-大白话：
+简单理解：
 
 > Model 是 PHP 里代表数据库表的类。你操作 Model，就相当于操作数据库表。
 

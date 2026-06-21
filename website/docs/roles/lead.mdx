@@ -3,6 +3,8 @@ title: 杨栋森：PHP 总体架构与前后端集成
 description: 给项目主负责人准备的学习路线，重点掌握 Laravel 总体结构、接口入口、数据库关系和兜底问题。
 ---
 
+import { Mermaid } from '../../theme/components/Mermaid';
+
 # 杨栋森：PHP 总体架构与前后端集成
 
 你的角色不是“只做前端”。你要负责把项目讲成一个完整系统。
@@ -32,13 +34,13 @@ frontend/src/hooks/useOceanData.ts
 
 ### 1. 项目怎么分层
 
-大白话：
+简单理解：
 
 > 前端负责展示和提交，PHP 后端负责校验和业务判断，数据库负责保存数据。
 
 ### 2. 请求怎么流动
 
-```mermaid
+<Mermaid chart={`
 flowchart LR
   F[前端页面] --> A[api.ts]
   A --> R[routes/api.php]
@@ -46,7 +48,7 @@ flowchart LR
   M --> C[Controller]
   C --> O[Model]
   O --> D[(SQLite)]
-```
+`} />
 
 ### 3. 你要兜底的后端问题
 

@@ -3,11 +3,13 @@ title: Ocean 项目补课站
 description: 面向 Ocean 课程设计小组的 PHP、数据库、Laravel 和项目分工补课站。
 ---
 
+import { Mermaid } from '../theme/components/Mermaid';
+
 # Ocean 项目补课站
 
 这个站不是普通教程，也不是单纯答辩稿。它的目标很明确：
 
-> 让我们组能用大白话看懂这个项目里用到的 PHP、数据库和 Laravel，知道自己负责的部分怎么讲，避免答辩时被问懵。
+> 让我们组能看懂这个项目里用到的 PHP、数据库和 Laravel，知道自己负责的部分怎么讲，避免答辩时被问懵。
 
 ## 先说人话：这个项目到底是什么？
 
@@ -23,31 +25,31 @@ description: 面向 Ocean 课程设计小组的 PHP、数据库、Laravel 和项
 6. 生成分析建议。
 7. 首页统计所有数据。
 
-```mermaid
+<Mermaid chart={`
 flowchart LR
   A[巡检任务] --> B[样本登记]
   B --> C[检测结果]
   C --> D[异常处理]
   D --> E[分析建议]
   E --> F[首页统计]
-```
+`} />
 
 ## 你应该怎么学
 
 如果你没基础，按这个顺序看：
 
-```mermaid
+<Mermaid chart={`
 flowchart TD
   A[项目总览] --> B[共同基础]
   B --> C[PHP 与 Laravel]
   C --> D[数据库补课]
   D --> E[按自己的分工学习]
   E --> F[运行与答辩问答]
-```
+`} />
 
 ## 分工学习入口
 
-- [杨栋森：PHP 总体架构与前后端集成](./roles/lead.md)
+- [杨栋森：PHP 总体架构与前后端集成](./roles/lead.mdx)
 - [基础较强组员：核心业务控制器](./roles/core-controller.md)
 - [基础薄弱组员 A：数据库表和基础模型](./roles/database-basic.md)
 - [基础薄弱组员 B：登录、运行和测试](./roles/auth-test.md)

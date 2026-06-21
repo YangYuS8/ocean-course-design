@@ -24,7 +24,7 @@ backend/app/Http/Controllers/DashboardController.php
 任务 -> 样本 -> 检测结果 -> 异常 -> 分析 -> 首页统计
 ```
 
-## 每个控制器的大白话
+## 每个控制器负责什么
 
 ### TaskController
 
