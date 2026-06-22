@@ -76,6 +76,7 @@ Samples page should include a detail panel showing the selected sample, results,
 - `GET /api/dashboard`
 - `GET /api/tasks`
 - `POST /api/tasks`
+- `PUT /api/tasks/{id}`
 - `POST /api/tasks/{id}/start`
 - `POST /api/tasks/{id}/submit`
 - `DELETE /api/tasks/{id}`

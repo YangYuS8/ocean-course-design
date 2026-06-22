@@ -39,6 +39,24 @@ class TaskController extends Controller
         return response()->json($task->refresh(), 201);
     }
 
+    /** 修改巡检任务基础信息。 */
+    public function update(Request $request, InspectionTask $task): JsonResponse
+    {
+        // 修改功能用于修正录入错误，体现数据库 CRUD 中的 Update 操作。
+        // 这里只允许修改任务基础资料，不直接修改 status，避免绕过“开始/提交”的业务流程。
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:120'],
+            'area' => ['required', 'string', 'max:120'],
+            'inspector' => ['required', 'string', 'max:60'],
+            'planned_date' => ['required', 'date'],
+            'description' => ['nullable', 'string'],
+        ]);
+
+        $task->update($data);
+
+        return response()->json($task->fresh());
+    }
+
     /** 将任务状态改为进行中。 */
     public function start(InspectionTask $task): JsonResponse
     {

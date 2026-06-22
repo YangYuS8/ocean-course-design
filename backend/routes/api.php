@@ -36,6 +36,7 @@ Route::middleware('auth.simple')->group(function (): void {
 
     Route::get('/tasks', [TaskController::class, 'index']);
     Route::post('/tasks', [TaskController::class, 'store']);
+    Route::put('/tasks/{task}', [TaskController::class, 'update']);
     Route::post('/tasks/{task}/start', [TaskController::class, 'start']);
     Route::post('/tasks/{task}/submit', [TaskController::class, 'submit']);
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);

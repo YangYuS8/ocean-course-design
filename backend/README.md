@@ -221,6 +221,7 @@ Route::get('/tasks', [TaskController::class, 'index']);
 | `GET` | `/api/dashboard` | 首页统计 |
 | `GET` | `/api/tasks` | 任务列表 |
 | `POST` | `/api/tasks` | 新建任务 |
+| `PUT` | `/api/tasks/{task}` | 修改任务基础信息 |
 | `POST` | `/api/tasks/{task}/start` | 开始任务 |
 | `POST` | `/api/tasks/{task}/submit` | 提交任务 |
 | `DELETE` | `/api/tasks/{task}` | 删除任务 |

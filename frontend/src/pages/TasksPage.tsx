@@ -1,8 +1,9 @@
 /**
  * 巡检任务页面。
  *
- * 负责新建任务、开始任务、提交任务和删除任务。
- * 表单提交后会调用 api.createTask()；操作成功后调用 onChanged() 重新刷新后端数据。
+ * 负责新建任务、修改任务、开始任务、提交任务和删除任务。
+ * 表单提交后会根据 editingTaskId 判断是调用 api.createTask() 还是 api.updateTask()；
+ * 操作成功后调用 onChanged() 重新刷新后端数据。
  */
 import type { FormEvent } from 'react'
 import { Fragment, useState } from 'react'
@@ -19,6 +20,7 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
   const [submitting, setSubmitting] = useState(false)
   const [busyTaskId, setBusyTaskId] = useState<number | null>(null)
   const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null)
+  const [editingTaskId, setEditingTaskId] = useState<number | null>(null)
 
   const formatDateTime = (value?: string | null) => value || '未记录'
 
@@ -35,16 +37,21 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
     return '已完成'
   }
 
+  const editingTask = editingTaskId ? tasks.find((task) => task.id === editingTaskId) : null
+
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formElement = event.currentTarget
     setSubmitting(true)
     setNotice('')
     try {
-      const task = await api.createTask(formToObject(formElement))
+      const formData = formToObject(formElement)
+      const task = editingTask ? await api.updateTask(editingTask.id, formData) : await api.createTask(formData)
       formElement.reset()
+      setEditingTaskId(null)
+      setExpandedTaskId(task.id)
       await onChanged()
-      setNotice(`已保存任务：${task.title}`)
+      setNotice(editingTask ? `已修改任务：${task.title}` : `已保存任务：${task.title}`)
     } catch (e) {
       setNotice(e instanceof Error ? e.message : '任务保存失败')
     } finally {
@@ -81,6 +88,8 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
     setNotice('')
     try {
       await api.deleteTask(task.id)
+      if (editingTaskId === task.id) setEditingTaskId(null)
+      if (expandedTaskId === task.id) setExpandedTaskId(null)
       await onChanged()
       setNotice(`已删除任务：${task.title}`)
     } catch (e) {
@@ -90,16 +99,30 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
     }
   }
 
+  const editTask = (task: InspectionTask) => {
+    setEditingTaskId(task.id)
+    setExpandedTaskId(task.id)
+    setNotice(`正在修改任务：${task.title}`)
+  }
+
+  const cancelEdit = () => {
+    setEditingTaskId(null)
+    setNotice('已取消修改任务')
+  }
+
   return (
     <section className="two-column align-start">
-      <DataCard title="新建巡检任务" eyebrow="Mission Form">
-        <form className="form-grid" onSubmit={submit}>
-          <Input name="title" label="任务名称" required placeholder="例如：近岸水质巡检" />
-          <Input name="area" label="巡检区域" required placeholder="例如：东湾 A 区" />
-          <Input name="inspector" label="负责人" required placeholder="巡检人员姓名" />
-          <Input name="planned_date" label="计划日期" required type="date" />
-          <TextareaField name="description" label="任务说明" placeholder="说明本次巡检关注的海域、指标或现场目标" />
-          <button className="primary-button" disabled={submitting} type="submit">{submitting ? '保存中…' : '保存任务'}</button>
+      <DataCard title={editingTask ? '修改巡检任务' : '新建巡检任务'} eyebrow="Mission Form">
+        <form className="form-grid" key={editingTask?.id ?? 'create-task'} onSubmit={submit}>
+          <Input name="title" label="任务名称" required defaultValue={editingTask?.title ?? ''} placeholder="例如：近岸水质巡检" />
+          <Input name="area" label="巡检区域" required defaultValue={editingTask?.area ?? ''} placeholder="例如：东湾 A 区" />
+          <Input name="inspector" label="负责人" required defaultValue={editingTask?.inspector ?? ''} placeholder="巡检人员姓名" />
+          <Input name="planned_date" label="计划日期" required defaultValue={editingTask?.planned_date ?? ''} type="date" />
+          <TextareaField name="description" label="任务说明" defaultValue={editingTask?.description ?? ''} placeholder="说明本次巡检关注的海域、指标或现场目标" />
+          <div className="actions">
+            <button className="primary-button" disabled={submitting} type="submit">{submitting ? '保存中…' : editingTask ? '保存修改' : '保存任务'}</button>
+            {editingTask ? <button className="ghost-button" disabled={submitting} onClick={cancelEdit} type="button">取消修改</button> : null}
+          </div>
           {notice ? <p className="rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-800">{notice}</p> : null}
         </form>
       </DataCard>
@@ -123,6 +146,7 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
                       <td><Badge>{statusText[task.status] ?? task.status}</Badge></td>
                       <td className="actions" onClick={(event) => event.stopPropagation()}>
                         <button disabled={busyTaskId === task.id || !canAdvance} onClick={() => advanceStatus(task)} type="button">{busyTaskId === task.id ? '处理中…' : nextStatusLabel(task)}</button>
+                        <button className="ghost-button" disabled={busyTaskId === task.id} onClick={() => editTask(task)} type="button">修改</button>
                         <button className="ghost-button" disabled={busyTaskId === task.id} onClick={() => deleteTask(task)} type="button">{busyTaskId === task.id ? '处理中…' : '删除'}</button>
                       </td>
                     </tr>

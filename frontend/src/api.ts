@@ -94,6 +94,7 @@ export const api = {
   getDashboard: () => request<DashboardData>('/dashboard'),
   getTasks: async () => unwrapList(await request<InspectionTask[] | { data?: InspectionTask[] }>('/tasks')),
   createTask: (data: JsonValue) => request<InspectionTask>('/tasks', { method: 'POST', body: JSON.stringify(data) }),
+  updateTask: (id: number, data: JsonValue) => request<InspectionTask>(`/tasks/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   startTask: (id: number) => request<InspectionTask>(`/tasks/${id}/start`, { method: 'POST' }),
   submitTask: (id: number) => request<InspectionTask>(`/tasks/${id}/submit`, { method: 'POST' }),
   deleteTask: (id: number) => request<void>(`/tasks/${id}`, { method: 'DELETE' }),

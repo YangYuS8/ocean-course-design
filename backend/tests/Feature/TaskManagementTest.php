@@ -28,6 +28,40 @@ class TaskManagementTest extends TestCase
         return ['Authorization' => 'Bearer '.$token];
     }
 
+    public function test_authenticated_user_can_update_inspection_task(): void
+    {
+        $headers = $this->authHeaders();
+
+        $task = InspectionTask::query()->create([
+            'title' => '写错的巡检任务',
+            'area' => '错误海域',
+            'inspector' => '旧负责人',
+            'planned_date' => '2026-06-20',
+            'description' => '这是一条需要修改的任务说明。',
+        ]);
+
+        $this->withHeaders($headers)
+            ->putJson("/api/tasks/{$task->id}", [
+                'title' => '修正后的巡检任务',
+                'area' => '东湾 A 区',
+                'inspector' => '张海宁',
+                'planned_date' => '2026-06-22',
+                'description' => '已修正任务区域、负责人和计划日期。',
+            ])->assertOk()
+            ->assertJsonPath('title', '修正后的巡检任务')
+            ->assertJsonPath('area', '东湾 A 区')
+            ->assertJsonPath('inspector', '张海宁')
+            ->assertJsonPath('planned_date', '2026-06-22')
+            ->assertJsonPath('description', '已修正任务区域、负责人和计划日期。');
+
+        $this->assertDatabaseHas('inspection_tasks', [
+            'id' => $task->id,
+            'title' => '修正后的巡检任务',
+            'area' => '东湾 A 区',
+            'inspector' => '张海宁',
+        ]);
+    }
+
     public function test_authenticated_user_can_delete_inspection_task(): void
     {
         $headers = $this->authHeaders();

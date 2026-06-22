@@ -125,6 +125,7 @@ samples 1 --- N analysis_jobs
 | --- | --- | --- |
 | GET | `/api/tasks` | 获取任务列表 |
 | POST | `/api/tasks` | 创建任务 |
+| PUT | `/api/tasks/{id}` | 修改任务基础信息 |
 | POST | `/api/tasks/{id}/start` | 开始任务 |
 | POST | `/api/tasks/{id}/submit` | 提交任务 |
 | DELETE | `/api/tasks/{id}` | 删除任务 |
