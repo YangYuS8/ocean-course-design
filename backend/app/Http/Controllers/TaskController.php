@@ -43,6 +43,11 @@ class TaskController extends Controller
     public function start(InspectionTask $task): JsonResponse
     {
         // 路由模型绑定会根据 {task} 自动查询 InspectionTask，找不到时返回 404。
+        // 简化版虽然不做复杂状态机，但仍要保护最基本的业务顺序：只能从“待开始”进入“进行中”。
+        if ($task->status !== '待开始') {
+            return response()->json(['message' => '只有待开始的任务才能开始'], 422);
+        }
+
         $task->update([
             'status' => '进行中',
             'started_at' => now(),
@@ -54,6 +59,11 @@ class TaskController extends Controller
     /** 提交任务，表示本次巡检流程已完成录入。 */
     public function submit(InspectionTask $task): JsonResponse
     {
+        // 只能提交已经开始的任务，避免前端禁用按钮被绕过后直接把未开始任务标记完成。
+        if ($task->status !== '进行中') {
+            return response()->json(['message' => '只有进行中的任务才能提交'], 422);
+        }
+
         $task->update([
             'status' => '已提交',
             'submitted_at' => now(),
