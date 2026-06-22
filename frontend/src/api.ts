@@ -96,6 +96,7 @@ export const api = {
   createTask: (data: JsonValue) => request<InspectionTask>('/tasks', { method: 'POST', body: JSON.stringify(data) }),
   startTask: (id: number) => request<InspectionTask>(`/tasks/${id}/start`, { method: 'POST' }),
   submitTask: (id: number) => request<InspectionTask>(`/tasks/${id}/submit`, { method: 'POST' }),
+  deleteTask: (id: number) => request<void>(`/tasks/${id}`, { method: 'DELETE' }),
   getSamples: async () => unwrapList(await request<Sample[] | { data?: Sample[] }>('/samples')),
   getSample: (id: number) => request<Sample>(`/samples/${id}`),
   createSample: (data: JsonValue) => request<Sample>('/samples', { method: 'POST', body: JSON.stringify(data) }),

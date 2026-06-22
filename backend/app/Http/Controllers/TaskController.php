@@ -61,4 +61,15 @@ class TaskController extends Controller
 
         return response()->json($task->fresh());
     }
+
+    /** 删除巡检任务。 */
+    public function destroy(InspectionTask $task): JsonResponse
+    {
+        // 迁移文件中 samples.inspection_task_id 使用了 cascadeOnDelete，
+        // 因此删除任务时，任务下面的样本以及样本关联的检测结果、异常和分析记录会被数据库级联删除。
+        // 这符合“删除任务就是删除整条巡检链路数据”的页面语义，避免留下孤立样本。
+        $task->delete();
+
+        return response()->json(null, 204);
+    }
 }

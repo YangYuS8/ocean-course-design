@@ -131,7 +131,7 @@ flowchart TD
 | --- | --- | --- |
 | 登录 | `src/pages/LoginPage.tsx` | 登录并保存 token |
 | 运营总览 | `src/pages/DashboardPage.tsx` | 展示统计、异常结果、近期异常 |
-| 巡检任务 | `src/pages/TasksPage.tsx` | 创建、开始、提交任务 |
+| 巡检任务 | `src/pages/TasksPage.tsx` | 创建、开始、提交、删除任务 |
 | 样本管理 | `src/pages/SamplesPage.tsx` | 登记样本并展示样本列表 |
 | 检测结果 | `src/pages/ResultsPage.tsx` | 录入指标和参考范围 |
 | 异常分析 | `src/pages/ExceptionsPage.tsx` | 上报异常、处理异常、生成建议 |

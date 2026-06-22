@@ -127,6 +127,7 @@ samples 1 --- N analysis_jobs
 | POST | `/api/tasks` | 创建任务 |
 | POST | `/api/tasks/{id}/start` | 开始任务 |
 | POST | `/api/tasks/{id}/submit` | 提交任务 |
+| DELETE | `/api/tasks/{id}` | 删除任务 |
 
 创建任务请求示例：
 

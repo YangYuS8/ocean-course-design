@@ -223,6 +223,7 @@ Route::get('/tasks', [TaskController::class, 'index']);
 | `POST` | `/api/tasks` | 新建任务 |
 | `POST` | `/api/tasks/{task}/start` | 开始任务 |
 | `POST` | `/api/tasks/{task}/submit` | 提交任务 |
+| `DELETE` | `/api/tasks/{task}` | 删除任务 |
 | `GET` | `/api/samples` | 样本列表 |
 | `POST` | `/api/samples` | 登记样本 |
 | `GET` | `/api/samples/{sample}` | 样本详情 |

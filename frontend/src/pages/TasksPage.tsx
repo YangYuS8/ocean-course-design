@@ -1,7 +1,7 @@
 /**
  * 巡检任务页面。
  *
- * 负责新建任务、开始任务和提交任务。
+ * 负责新建任务、开始任务、提交任务和删除任务。
  * 表单提交后会调用 api.createTask()；操作成功后调用 onChanged() 重新刷新后端数据。
  */
 import type { FormEvent } from 'react'
@@ -50,6 +50,24 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
     }
   }
 
+  const deleteTask = async (task: InspectionTask) => {
+    const sampleCount = task.samples_count ?? 0
+    const warning = sampleCount > 0 ? `，并同步删除下面的 ${sampleCount} 个样本及其检测/异常/分析记录` : ''
+    if (!window.confirm(`确定删除巡检任务“${task.title}”吗？${warning}`)) return
+
+    setBusyTaskId(task.id)
+    setNotice('')
+    try {
+      await api.deleteTask(task.id)
+      await onChanged()
+      setNotice(`已删除任务：${task.title}`)
+    } catch (e) {
+      setNotice(e instanceof Error ? e.message : '任务删除失败')
+    } finally {
+      setBusyTaskId(null)
+    }
+  }
+
   return (
     <section className="two-column align-start">
       <DataCard title="新建巡检任务" eyebrow="Mission Form">
@@ -75,6 +93,7 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
                   <td className="actions">
                     <button disabled={busyTaskId === task.id || task.status === '进行中'} onClick={() => changeStatus(task, 'start')} type="button">{busyTaskId === task.id ? '处理中…' : '开始'}</button>
                     <button className="ghost-button" disabled={busyTaskId === task.id || task.status === '已提交'} onClick={() => changeStatus(task, 'submit')} type="button">{busyTaskId === task.id ? '处理中…' : '提交'}</button>
+                    <button className="ghost-button" disabled={busyTaskId === task.id} onClick={() => deleteTask(task)} type="button">{busyTaskId === task.id ? '处理中…' : '删除'}</button>
                   </td>
                 </tr>
               ))}

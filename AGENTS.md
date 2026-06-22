@@ -78,6 +78,7 @@ Samples page should include a detail panel showing the selected sample, results,
 - `POST /api/tasks`
 - `POST /api/tasks/{id}/start`
 - `POST /api/tasks/{id}/submit`
+- `DELETE /api/tasks/{id}`
 - `GET /api/samples`
 - `POST /api/samples`
 - `GET /api/samples/{id}`
