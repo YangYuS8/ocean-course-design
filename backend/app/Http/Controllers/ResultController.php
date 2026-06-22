@@ -27,7 +27,7 @@ class ResultController extends Controller
         $data['is_abnormal'] = $this->isAbnormalFromData($data);
 
         $result = $sample->results()->create($data);
-        $sample->update(['status' => $data['is_abnormal'] ? '发现异常' : '已检测']);
+        $this->refreshSampleStatus($sample);
 
         // 如果检测值异常，自动生成一条待处理异常记录，让“检测结果 -> 异常处理”形成闭环。
         // firstOrCreate 可以避免同一样本同一指标重复录入时产生完全相同的异常标题。
@@ -47,8 +47,12 @@ class ResultController extends Controller
         $sample = Sample::query()->findOrFail($data['sample_id']);
         $data['is_abnormal'] = $this->isAbnormalFromData($data);
 
+        $oldSample = $result->sample;
         $result->update($data);
-        $sample->update(['status' => $data['is_abnormal'] ? '发现异常' : '已检测']);
+        $this->refreshSampleStatus($sample);
+        if ($oldSample && $oldSample->id !== $sample->id) {
+            $this->refreshSampleStatus($oldSample);
+        }
 
         if ($data['is_abnormal']) {
             $this->ensureException($sample, $data);
@@ -62,7 +66,12 @@ class ResultController extends Controller
     {
         // 删除检测结果只移除本条检测记录；异常记录是否保留给异常处理模块判断，
         // 这样课程演示时可以说明“检测记录”和“异常处置记录”是两类表。
+        $sample = $result->sample;
         $result->delete();
+
+        if ($sample) {
+            $this->refreshSampleStatus($sample);
+        }
 
         return response()->json(null, 204);
     }
@@ -111,6 +120,22 @@ class ResultController extends Controller
                 'description' => $this->exceptionDescription($data),
             ],
         );
+    }
+
+    /** 根据当前检测结果重新计算样本状态。 */
+    private function refreshSampleStatus(Sample $sample): void
+    {
+        // 检测结果被修改或删除后，样本状态也必须同步更新：
+        // 没有结果回到“已登记”，有任意异常为“发现异常”，其余情况为“已检测”。
+        if (! $sample->results()->exists()) {
+            $sample->update(['status' => '已登记']);
+
+            return;
+        }
+
+        $sample->update([
+            'status' => $sample->results()->where('is_abnormal', true)->exists() ? '发现异常' : '已检测',
+        ]);
     }
 
     /** 判断检测值是否低于下限或高于上限。 */

@@ -131,11 +131,19 @@ class SampleResultManagementTest extends TestCase
             'tester' => '陈一鸣',
             'is_abnormal' => false,
         ]);
+        $this->assertDatabaseHas('samples', [
+            'id' => $sample->id,
+            'status' => '已检测',
+        ]);
 
         $this->withHeaders($headers)
             ->deleteJson("/api/results/{$result->id}")
             ->assertNoContent();
 
         $this->assertDatabaseMissing('sample_results', ['id' => $result->id]);
+        $this->assertDatabaseHas('samples', [
+            'id' => $sample->id,
+            'status' => '已登记',
+        ]);
     }
 }
