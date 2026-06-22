@@ -148,6 +148,8 @@ samples 1 --- N analysis_jobs
 | --- | --- | --- |
 | GET | `/api/samples` | 获取样本列表 |
 | POST | `/api/samples` | 登记样本 |
+| PUT | `/api/samples/{id}` | 修改样本基础信息 |
+| DELETE | `/api/samples/{id}` | 删除样本 |
 | GET | `/api/samples/{id}` | 查看样本详情，包含检测结果、异常记录和分析报告 |
 | POST | `/api/samples/{id}/results` | 为样本录入检测结果 |
 
@@ -186,6 +188,8 @@ samples 1 --- N analysis_jobs
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
 | GET | `/api/results` | 获取检测结果列表 |
+| PUT | `/api/results/{id}` | 修改检测结果并重新判断是否异常 |
+| DELETE | `/api/results/{id}` | 删除检测结果 |
 
 ### 异常
 

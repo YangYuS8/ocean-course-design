@@ -32,8 +32,8 @@ backend/
 │   │   │   ├── UserController.php           # 简化用户管理：管理员增删改查用户
 │   │   │   ├── DashboardController.php      # 首页统计：任务、样本、结果、异常、分析建议
 │   │   │   ├── TaskController.php           # 巡检任务：创建、开始、提交、查询
-│   │   │   ├── SampleController.php         # 样本：登记、列表、详情
-│   │   │   ├── ResultController.php         # 检测结果：录入指标、判断异常、自动生成异常
+│   │   │   ├── SampleController.php         # 样本：登记、修改、删除、列表、详情
+│   │   │   ├── ResultController.php         # 检测结果：录入/修改/删除指标、判断异常、自动生成异常
 │   │   │   ├── ExceptionController.php      # 异常：上报、列表、处理
 │   │   │   ├── AnalysisController.php       # 分析：根据检测结果和异常状态生成建议
 │   │   │   └── Controller.php               # Laravel 控制器基类，本项目基本不需要讲
@@ -227,9 +227,13 @@ Route::get('/tasks', [TaskController::class, 'index']);
 | `DELETE` | `/api/tasks/{task}` | 删除任务 |
 | `GET` | `/api/samples` | 样本列表 |
 | `POST` | `/api/samples` | 登记样本 |
+| `PUT` | `/api/samples/{sample}` | 修改样本基础信息 |
+| `DELETE` | `/api/samples/{sample}` | 删除样本 |
 | `GET` | `/api/samples/{sample}` | 样本详情 |
 | `POST` | `/api/samples/{sample}/results` | 录入检测结果 |
 | `GET` | `/api/results` | 检测结果列表 |
+| `PUT` | `/api/results/{result}` | 修改检测结果 |
+| `DELETE` | `/api/results/{result}` | 删除检测结果 |
 | `GET` | `/api/exceptions` | 异常列表 |
 | `POST` | `/api/exceptions` | 手动上报异常 |
 | `POST` | `/api/exceptions/{exception}/resolve` | 处理异常 |

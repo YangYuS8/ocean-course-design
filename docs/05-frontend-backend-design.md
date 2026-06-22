@@ -59,8 +59,8 @@ VITE_API_BASE_URL=http://127.0.0.1:8000/api
 | --- | --- |
 | DashboardController | 首页统计接口 |
 | InspectionTaskController | 任务列表、创建、开始、提交 |
-| SampleController | 样本列表、登记、详情 |
-| SampleResultController | 检测结果列表和录入 |
+| SampleController | 样本列表、登记、修改、删除、详情 |
+| SampleResultController | 检测结果列表、录入、修改、删除 |
 | ExceptionController | 异常列表、上报、处理 |
 | AnalysisController | 样本分析建议生成 |
 

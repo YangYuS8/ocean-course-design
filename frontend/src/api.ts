@@ -101,9 +101,13 @@ export const api = {
   getSamples: async () => unwrapList(await request<Sample[] | { data?: Sample[] }>('/samples')),
   getSample: (id: number) => request<Sample>(`/samples/${id}`),
   createSample: (data: JsonValue) => request<Sample>('/samples', { method: 'POST', body: JSON.stringify(data) }),
+  updateSample: (id: number, data: JsonValue) => request<Sample>(`/samples/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteSample: (id: number) => request<void>(`/samples/${id}`, { method: 'DELETE' }),
   getResults: async () => unwrapList(await request<SampleResult[] | { data?: SampleResult[] }>('/results')),
   addResult: (sampleId: number, data: JsonValue) =>
     request<SampleResult>(`/samples/${sampleId}/results`, { method: 'POST', body: JSON.stringify(data) }),
+  updateResult: (id: number, data: JsonValue) => request<SampleResult>(`/results/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteResult: (id: number) => request<void>(`/results/${id}`, { method: 'DELETE' }),
   getExceptions: async () => unwrapList(await request<ExceptionRecord[] | { data?: ExceptionRecord[] }>('/exceptions')),
   createException: (data: JsonValue) =>
     request<ExceptionRecord>('/exceptions', { method: 'POST', body: JSON.stringify(data) }),

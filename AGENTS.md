@@ -82,9 +82,13 @@ Samples page should include a detail panel showing the selected sample, results,
 - `DELETE /api/tasks/{id}`
 - `GET /api/samples`
 - `POST /api/samples`
+- `PUT /api/samples/{id}`
+- `DELETE /api/samples/{id}`
 - `GET /api/samples/{id}`
 - `POST /api/samples/{id}/results`
 - `GET /api/results`
+- `PUT /api/results/{id}`
+- `DELETE /api/results/{id}`
 - `GET /api/exceptions`
 - `POST /api/exceptions`
 - `POST /api/exceptions/{id}/resolve`

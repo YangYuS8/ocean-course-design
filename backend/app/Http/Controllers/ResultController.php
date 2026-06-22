@@ -22,22 +22,9 @@ class ResultController extends Controller
     /** 给某个样本新增一条检测结果。 */
     public function store(Request $request, Sample $sample): JsonResponse
     {
-        $data = $request->validate([
-            'indicator' => ['required', 'string', 'max:80'],
-            'value' => ['required', 'numeric'],
-            'unit' => ['nullable', 'string', 'max:40'],
-            'standard_min' => ['nullable', 'numeric'],
-            'standard_max' => ['nullable', 'numeric'],
-            'tested_at' => ['required', 'date'],
-            'tester' => ['required', 'string', 'max:60'],
-        ]);
+        $data = $this->validatedData($request);
 
-        // 后端统一计算是否异常，避免前端随意传值导致数据不可信。
-        $data['is_abnormal'] = $this->isAbnormal(
-            (float) $data['value'],
-            isset($data['standard_min']) ? (float) $data['standard_min'] : null,
-            isset($data['standard_max']) ? (float) $data['standard_max'] : null,
-        );
+        $data['is_abnormal'] = $this->isAbnormalFromData($data);
 
         $result = $sample->results()->create($data);
         $sample->update(['status' => $data['is_abnormal'] ? '发现异常' : '已检测']);
@@ -45,20 +32,85 @@ class ResultController extends Controller
         // 如果检测值异常，自动生成一条待处理异常记录，让“检测结果 -> 异常处理”形成闭环。
         // firstOrCreate 可以避免同一样本同一指标重复录入时产生完全相同的异常标题。
         if ($data['is_abnormal']) {
-            SampleException::query()->firstOrCreate(
-                [
-                    'sample_id' => $sample->id,
-                    'title' => $data['indicator'].' 指标异常',
-                ],
-                [
-                    'level' => '中',
-                    'status' => '待处理',
-                    'description' => $this->exceptionDescription($data),
-                ],
-            );
+            $this->ensureException($sample, $data);
         }
 
         return response()->json($result->load('sample:id,code,location'), 201);
+    }
+
+    /** 修改检测结果。 */
+    public function update(Request $request, SampleResult $result): JsonResponse
+    {
+        // 检测结果修改用于修正实验录入错误，体现数据库 CRUD 中的 Update 操作。
+        // 是否异常仍由后端根据参考上下限重新计算，避免前端直接伪造异常状态。
+        $data = $this->validatedData($request, true);
+        $sample = Sample::query()->findOrFail($data['sample_id']);
+        $data['is_abnormal'] = $this->isAbnormalFromData($data);
+
+        $result->update($data);
+        $sample->update(['status' => $data['is_abnormal'] ? '发现异常' : '已检测']);
+
+        if ($data['is_abnormal']) {
+            $this->ensureException($sample, $data);
+        }
+
+        return response()->json($result->fresh()->load('sample:id,code,location'));
+    }
+
+    /** 删除检测结果。 */
+    public function destroy(SampleResult $result): JsonResponse
+    {
+        // 删除检测结果只移除本条检测记录；异常记录是否保留给异常处理模块判断，
+        // 这样课程演示时可以说明“检测记录”和“异常处置记录”是两类表。
+        $result->delete();
+
+        return response()->json(null, 204);
+    }
+
+    /** 检测结果创建和修改共用的校验逻辑。 */
+    private function validatedData(Request $request, bool $includeSample = false): array
+    {
+        $rules = [
+            'indicator' => ['required', 'string', 'max:80'],
+            'value' => ['required', 'numeric'],
+            'unit' => ['nullable', 'string', 'max:40'],
+            'standard_min' => ['nullable', 'numeric'],
+            'standard_max' => ['nullable', 'numeric'],
+            'tested_at' => ['required', 'date'],
+            'tester' => ['required', 'string', 'max:60'],
+        ];
+
+        if ($includeSample) {
+            $rules['sample_id'] = ['required', 'exists:samples,id'];
+        }
+
+        return $request->validate($rules);
+    }
+
+    /** 根据检测数据统一计算是否异常。 */
+    private function isAbnormalFromData(array $data): bool
+    {
+        return $this->isAbnormal(
+            (float) $data['value'],
+            isset($data['standard_min']) ? (float) $data['standard_min'] : null,
+            isset($data['standard_max']) ? (float) $data['standard_max'] : null,
+        );
+    }
+
+    /** 异常检测结果自动生成待处理异常记录。 */
+    private function ensureException(Sample $sample, array $data): void
+    {
+        SampleException::query()->firstOrCreate(
+            [
+                'sample_id' => $sample->id,
+                'title' => $data['indicator'].' 指标异常',
+            ],
+            [
+                'level' => '中',
+                'status' => '待处理',
+                'description' => $this->exceptionDescription($data),
+            ],
+        );
     }
 
     /** 判断检测值是否低于下限或高于上限。 */

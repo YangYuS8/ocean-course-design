@@ -43,11 +43,15 @@ Route::middleware('auth.simple')->group(function (): void {
 
     Route::get('/samples', [SampleController::class, 'index']);
     Route::post('/samples', [SampleController::class, 'store']);
+    Route::put('/samples/{sample}', [SampleController::class, 'update']);
+    Route::delete('/samples/{sample}', [SampleController::class, 'destroy']);
     Route::get('/samples/{sample}', [SampleController::class, 'show']);
     Route::post('/samples/{sample}/results', [ResultController::class, 'store']);
     Route::post('/samples/{sample}/analyze', [AnalysisController::class, 'store']);
 
     Route::get('/results', [ResultController::class, 'index']);
+    Route::put('/results/{result}', [ResultController::class, 'update']);
+    Route::delete('/results/{result}', [ResultController::class, 'destroy']);
 
     Route::get('/exceptions', [ExceptionController::class, 'index']);
     Route::post('/exceptions', [ExceptionController::class, 'store']);

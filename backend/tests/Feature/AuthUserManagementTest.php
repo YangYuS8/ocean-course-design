@@ -73,10 +73,22 @@ class AuthUserManagementTest extends TestCase
             ->assertJsonFragment(['email' => 'inspector@example.com']);
 
         $this->withHeader('Authorization', 'Bearer '.$adminToken)
-            ->putJson('/api/users/'.$userId, ['name' => '高级巡检员', 'role' => 'admin'])
+            ->putJson('/api/users/'.$userId, [
+                'name' => '高级巡检员',
+                'email' => 'senior-inspector@example.com',
+                'role' => 'admin',
+            ])
             ->assertOk()
             ->assertJsonPath('name', '高级巡检员')
+            ->assertJsonPath('email', 'senior-inspector@example.com')
             ->assertJsonPath('role', 'admin');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $userId,
+            'name' => '高级巡检员',
+            'email' => 'senior-inspector@example.com',
+            'role' => 'admin',
+        ]);
 
         $this->withHeader('Authorization', 'Bearer '.$adminToken)
             ->deleteJson('/api/users/'.$userId)

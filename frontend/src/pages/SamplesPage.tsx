@@ -1,8 +1,8 @@
 /**
  * 样本管理页面。
  *
- * 负责把现场采集的水样登记到某个巡检任务下面，并通过样本详情展示检测结果、异常记录和分析报告摘要。
- * 这里体现了前端表单字段必须和 Laravel 后端校验字段保持一致：inspection_task_id、code、location、collector 等。
+ * 负责把现场采集的水样登记到某个巡检任务下面，也支持修改和删除样本。
+ * 这样如果采样编号、点位、天气或坐标写错，可以直接修正，不必删除后重新登记。
  */
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
@@ -19,6 +19,10 @@ export function SamplesPage({ samples, tasks, onChanged }: { samples: Sample[]; 
   const [detailLoading, setDetailLoading] = useState(false)
   const [notice, setNotice] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [busySampleId, setBusySampleId] = useState<number | null>(null)
+  const [editingSampleId, setEditingSampleId] = useState<number | null>(null)
+
+  const editingSample = editingSampleId ? samples.find((item) => item.id === editingSampleId) : null
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -26,12 +30,15 @@ export function SamplesPage({ samples, tasks, onChanged }: { samples: Sample[]; 
     setSubmitting(true)
     setNotice('')
     try {
-      const sample = await api.createSample(formToObject(formElement))
+      const data = formToObject(formElement)
+      const sample = editingSample ? await api.updateSample(editingSample.id, data) : await api.createSample(data)
       formElement.reset()
+      setEditingSampleId(null)
       await onChanged()
-      setNotice(`已登记样本：${sample.code}`)
+      setSelectedSample(await api.getSample(sample.id))
+      setNotice(editingSample ? `已修改样本：${sample.code}` : `已登记样本：${sample.code}`)
     } catch (e) {
-      setNotice(e instanceof Error ? e.message : '样本登记失败')
+      setNotice(e instanceof Error ? e.message : '样本保存失败')
     } finally {
       setSubmitting(false)
     }
@@ -49,6 +56,34 @@ export function SamplesPage({ samples, tasks, onChanged }: { samples: Sample[]; 
     }
   }
 
+  const editSample = (sample: Sample) => {
+    setEditingSampleId(sample.id)
+    setNotice(`正在修改样本：${sample.code}`)
+  }
+
+  const cancelEdit = () => {
+    setEditingSampleId(null)
+    setNotice('已取消修改样本')
+  }
+
+  const deleteSample = async (sample: Sample) => {
+    if (!window.confirm(`确定删除样本“${sample.code}”吗？该样本下的检测结果、异常和分析记录会一并删除。`)) return
+
+    setBusySampleId(sample.id)
+    setNotice('')
+    try {
+      await api.deleteSample(sample.id)
+      if (editingSampleId === sample.id) setEditingSampleId(null)
+      if (selectedSample?.id === sample.id) setSelectedSample(null)
+      await onChanged()
+      setNotice(`已删除样本：${sample.code}`)
+    } catch (e) {
+      setNotice(e instanceof Error ? e.message : '样本删除失败')
+    } finally {
+      setBusySampleId(null)
+    }
+  }
+
   useEffect(() => {
     if (!selectedSample) return
     const stillExists = samples.some((item) => item.id === selectedSample.id)
@@ -58,18 +93,21 @@ export function SamplesPage({ samples, tasks, onChanged }: { samples: Sample[]; 
   return (
     <section className="page-stack">
       <section className="two-column align-start">
-        <DataCard title="登记样本" eyebrow="Sample Registry">
-          <form className="form-grid" onSubmit={submit}>
-            <SelectField name="inspection_task_id" label="关联任务">{tasks.map((task) => <option key={task.id} value={task.id}>{task.title}</option>)}</SelectField>
-            <Input name="code" label="样本编号" required placeholder="S-202606-004" />
-            <Input name="location" label="采样点位" required placeholder="东湾 A3 点位" />
-            <Input name="collector" label="采样人" required placeholder="李珊" />
-            <Input name="water_type" label="水体类型" placeholder="近岸海水" />
-            <Input name="weather" label="现场天气" placeholder="晴 / 多云 / 小雨" />
-            <Input name="coordinate" label="采样坐标" placeholder="121.48,38.92" />
-            <Input name="collected_at" label="采样时间" required type="datetime-local" />
-            <TextareaField name="notes" label="现场备注" placeholder="记录天气、水体气味、颜色等现场情况" />
-            <button className="primary-button" disabled={submitting} type="submit">{submitting ? '登记中…' : '登记样本'}</button>
+        <DataCard title={editingSample ? '修改样本' : '登记样本'} eyebrow="Sample Registry">
+          <form className="form-grid" key={editingSample?.id ?? 'create-sample'} onSubmit={submit}>
+            <SelectField name="inspection_task_id" label="关联任务" defaultValue={editingSample?.inspection_task_id ?? tasks[0]?.id}>{tasks.map((task) => <option key={task.id} value={task.id}>{task.title}</option>)}</SelectField>
+            <Input name="code" label="样本编号" required defaultValue={editingSample?.code ?? ''} placeholder="S-202606-004" />
+            <Input name="location" label="采样点位" required defaultValue={editingSample?.location ?? ''} placeholder="东湾 A3 点位" />
+            <Input name="collector" label="采样人" required defaultValue={editingSample?.collector ?? ''} placeholder="李珊" />
+            <Input name="water_type" label="水体类型" defaultValue={editingSample?.water_type ?? ''} placeholder="近岸海水" />
+            <Input name="weather" label="现场天气" defaultValue={editingSample?.weather ?? ''} placeholder="晴 / 多云 / 小雨" />
+            <Input name="coordinate" label="采样坐标" defaultValue={editingSample?.coordinate ?? ''} placeholder="121.48,38.92" />
+            <Input name="collected_at" label="采样时间" required defaultValue={editingSample?.collected_at?.replace(' ', 'T') ?? ''} type="datetime-local" />
+            <TextareaField name="notes" label="现场备注" defaultValue={editingSample?.notes ?? ''} placeholder="记录天气、水体气味、颜色等现场情况" />
+            <div className="actions">
+              <button className="primary-button" disabled={submitting} type="submit">{submitting ? '保存中…' : editingSample ? '保存修改' : '登记样本'}</button>
+              {editingSample ? <button className="ghost-button" disabled={submitting} onClick={cancelEdit} type="button">取消修改</button> : null}
+            </div>
             {notice ? <p className="rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-800">{notice}</p> : null}
           </form>
         </DataCard>
@@ -83,7 +121,11 @@ export function SamplesPage({ samples, tasks, onChanged }: { samples: Sample[]; 
               item.weather ?? '-',
               item.coordinate ?? '-',
               <Badge>{item.status ?? '已登记'}</Badge>,
-              <button className="ghost-button" disabled={detailLoading && selectedSample?.id === item.id} onClick={() => loadDetail(item.id)} type="button">{detailLoading && selectedSample?.id === item.id ? '加载中…' : '查看详情'}</button>,
+              <div className="actions">
+                <button className="ghost-button" disabled={detailLoading && selectedSample?.id === item.id} onClick={() => loadDetail(item.id)} type="button">{detailLoading && selectedSample?.id === item.id ? '加载中…' : '详情'}</button>
+                <button className="ghost-button" disabled={busySampleId === item.id} onClick={() => editSample(item)} type="button">修改</button>
+                <button className="ghost-button" disabled={busySampleId === item.id} onClick={() => deleteSample(item)} type="button">{busySampleId === item.id ? '处理中…' : '删除'}</button>
+              </div>,
             ])}
           />
         </DataCard>
