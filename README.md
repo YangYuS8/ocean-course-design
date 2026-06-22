@@ -111,12 +111,15 @@ docker compose up --build backend
 ```
 
 后端地址：`http://127.0.0.1:8000`。容器会自动安装 Composer 依赖、创建 `.env`、生成 `APP_KEY`、创建 SQLite 数据库并执行迁移和种子数据。
+普通重启容器不会清空数据库；前端新建的用户、任务、样本等数据会继续保存在 `backend/database/database.sqlite`。
 
 如需重置演示数据：
 
 ```bash
 docker compose exec backend php artisan migrate:fresh --seed
 ```
+
+注意：`migrate:fresh --seed` 会删除并重建所有表，只适合“重新恢复演示初始数据”时使用，不要在想保留测试数据时执行。
 
 ### 方式二：本机启动后端
 

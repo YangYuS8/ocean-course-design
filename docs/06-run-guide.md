@@ -29,6 +29,8 @@ docker compose up --build backend
 - 执行 `php artisan migrate --seed`；
 - 在 `0.0.0.0:8000` 启动 Laravel。
 
+容器普通重启只会继续使用已有的 SQLite 文件，不会清空已经通过页面或接口创建的数据。
+
 默认访问地址：`http://127.0.0.1:8000`。
 
 如果需要重置演示数据：
@@ -36,6 +38,8 @@ docker compose up --build backend
 ```bash
 docker compose exec backend php artisan migrate:fresh --seed
 ```
+
+注意：这条命令会删除并重建所有数据表。只有在“演示数据乱了，需要恢复初始状态”时才执行；如果要保留刚创建的用户、任务或样本，不要执行它。
 
 ### 备用方式：本机 PHP 启动
 
