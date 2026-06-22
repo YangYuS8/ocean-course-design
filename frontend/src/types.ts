@@ -15,8 +15,11 @@ export interface InspectionTask {
   inspector: string
   status: TaskStatus
   planned_date?: string | null
+  description?: string | null
   started_at?: string | null
   submitted_at?: string | null
+  created_at?: string | null
+  updated_at?: string | null
   samples_count?: number
 }
 

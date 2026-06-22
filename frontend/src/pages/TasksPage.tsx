@@ -5,7 +5,7 @@
  * 表单提交后会调用 api.createTask()；操作成功后调用 onChanged() 重新刷新后端数据。
  */
 import type { FormEvent } from 'react'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Badge } from '../components/ui/Badge'
 import { DataCard } from '../components/ui/DataCard'
 import { Input, TextareaField } from '../components/ui/FormField'
@@ -18,6 +18,22 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
   const [notice, setNotice] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [busyTaskId, setBusyTaskId] = useState<number | null>(null)
+  const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null)
+
+  const formatDateTime = (value?: string | null) => value || '未记录'
+
+  const nextStatusAction = (task: InspectionTask): 'start' | 'submit' | null => {
+    if (task.status === '待开始') return 'start'
+    if (task.status === '进行中') return 'submit'
+    return null
+  }
+
+  const nextStatusLabel = (task: InspectionTask) => {
+    const action = nextStatusAction(task)
+    if (action === 'start') return '开始任务'
+    if (action === 'submit') return '提交任务'
+    return '已完成'
+  }
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -48,6 +64,12 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
     } finally {
       setBusyTaskId(null)
     }
+  }
+
+  const advanceStatus = async (task: InspectionTask) => {
+    const action = nextStatusAction(task)
+    if (!action) return
+    await changeStatus(task, action)
   }
 
   const deleteTask = async (task: InspectionTask) => {
@@ -86,17 +108,47 @@ export function TasksPage({ tasks, onChanged }: { tasks: InspectionTask[]; onCha
           <table>
             <thead><tr><th>名称</th><th>区域</th><th>负责人</th><th>样本数</th><th>状态</th><th>操作</th></tr></thead>
             <tbody>
-              {tasks.map((task) => (
-                <tr key={task.id}>
-                  <td>{task.title}</td><td>{task.area}</td><td>{task.inspector}</td><td>{task.samples_count ?? 0}</td>
-                  <td><Badge>{statusText[task.status] ?? task.status}</Badge></td>
-                  <td className="actions">
-                    <button disabled={busyTaskId === task.id || task.status === '进行中'} onClick={() => changeStatus(task, 'start')} type="button">{busyTaskId === task.id ? '处理中…' : '开始'}</button>
-                    <button className="ghost-button" disabled={busyTaskId === task.id || task.status === '已提交'} onClick={() => changeStatus(task, 'submit')} type="button">{busyTaskId === task.id ? '处理中…' : '提交'}</button>
-                    <button className="ghost-button" disabled={busyTaskId === task.id} onClick={() => deleteTask(task)} type="button">{busyTaskId === task.id ? '处理中…' : '删除'}</button>
-                  </td>
-                </tr>
-              ))}
+              {tasks.map((task) => {
+                const expanded = expandedTaskId === task.id
+                const canAdvance = nextStatusAction(task) !== null
+
+                return (
+                  <Fragment key={task.id}>
+                    <tr
+                      className="cursor-pointer"
+                      onClick={() => setExpandedTaskId(expanded ? null : task.id)}
+                      title="点击查看任务详情"
+                    >
+                      <td>{task.title}</td><td>{task.area}</td><td>{task.inspector}</td><td>{task.samples_count ?? 0}</td>
+                      <td><Badge>{statusText[task.status] ?? task.status}</Badge></td>
+                      <td className="actions" onClick={(event) => event.stopPropagation()}>
+                        <button disabled={busyTaskId === task.id || !canAdvance} onClick={() => advanceStatus(task)} type="button">{busyTaskId === task.id ? '处理中…' : nextStatusLabel(task)}</button>
+                        <button className="ghost-button" disabled={busyTaskId === task.id} onClick={() => deleteTask(task)} type="button">{busyTaskId === task.id ? '处理中…' : '删除'}</button>
+                      </td>
+                    </tr>
+                    {expanded ? (
+                      <tr>
+                        <td colSpan={6}>
+                          <div className="detail-grid">
+                            <span><strong>任务编号</strong>#{task.id}</span>
+                            <span><strong>计划日期</strong>{task.planned_date || '未设置'}</span>
+                            <span><strong>开始时间</strong>{formatDateTime(task.started_at)}</span>
+                            <span><strong>提交时间</strong>{formatDateTime(task.submitted_at)}</span>
+                            <span><strong>创建时间</strong>{formatDateTime(task.created_at)}</span>
+                            <span><strong>更新时间</strong>{formatDateTime(task.updated_at)}</span>
+                            <span><strong>当前状态</strong>{statusText[task.status] ?? task.status}</span>
+                            <span><strong>样本数量</strong>{task.samples_count ?? 0} 个</span>
+                          </div>
+                          <p className="mt-3 rounded-2xl border border-ocean-line bg-ocean-soft px-4 py-3 text-sm leading-6 text-ocean-ink">
+                            <strong className="mb-1 block text-[11px] font-black uppercase tracking-[0.14em] text-ocean-muted">任务说明</strong>
+                            {task.description || '暂无任务说明'}
+                          </p>
+                        </td>
+                      </tr>
+                    ) : null}
+                  </Fragment>
+                )
+              })}
             </tbody>
           </table>
         </div>
