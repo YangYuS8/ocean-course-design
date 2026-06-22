@@ -1,20 +1,20 @@
 ---
-title: 杨栋森：PHP 总体架构与前后端集成
-description: 给项目主负责人准备的学习路线，重点掌握 Laravel 总体结构、接口入口、数据库关系和兜底问题。
+title: 杨栋森：PHP 后端总体架构、接口入口与用户管理
+description: 给项目统筹准备的学习路线，重点掌握 Laravel 总体结构、API 入口、登录保护、用户管理和接口集成边界。
 ---
 
 import { Mermaid } from '../../theme/components/Mermaid';
 
-# 杨栋森：PHP 总体架构与前后端集成
+# 杨栋森：PHP 后端总体架构、接口入口与用户管理
 
-你的角色不是“只做前端”。你要负责把项目讲成一个完整系统。
+你的角色不是“只做前端”，但也不是替全组兜底。老师已经明确不允许你帮助其他组员答辩，所以你只讲自己负责的后端范围。
 
 ## 你要掌握的范围
 
 你需要能串起来：
 
 ```text
-前端页面 -> api.ts -> routes/api.php -> 中间件 -> Controller -> Model -> SQLite
+前端页面 -> api.ts -> routes/api.php -> auth.simple 中间件 -> Controller -> Model -> SQLite
 ```
 
 重点文件：
@@ -23,16 +23,16 @@ import { Mermaid } from '../../theme/components/Mermaid';
 backend/routes/api.php
 backend/bootstrap/app.php
 backend/app/Http/Middleware/RequireApiToken.php
-backend/app/Http/Controllers/*.php
+backend/app/Http/Controllers/AuthController.php
+backend/app/Http/Controllers/UserController.php
+backend/app/Models/User.php
 backend/app/Models/*.php
 backend/database/migrations/*.php
 frontend/src/api.ts
 frontend/src/hooks/useOceanData.ts
-frontend/src/pages/SamplesPage.tsx
-frontend/src/pages/DashboardPage.tsx
 ```
 
-本次增强后的样本详情、首页近期分析建议、分析报告摘要展示，属于较难的前后端集成点，统一归你负责。其他组员只需要知道这些功能有什么用，不需要深入讲 React 状态和接口刷新。
+你重点讲后端入口、登录保护、用户管理和接口集成。任务、样本、检测结果、异常、分析建议的具体控制器逻辑，由林宇涵讲。
 
 ## 你要讲的主线
 
@@ -40,7 +40,7 @@ frontend/src/pages/DashboardPage.tsx
 
 简单理解：
 
-> 前端负责展示和提交，PHP 后端负责校验和业务判断，数据库负责保存数据。
+> 前端负责展示和提交，PHP 后端负责校验、权限判断和业务处理，数据库负责保存数据。
 
 ### 2. 请求怎么流动
 
@@ -48,28 +48,48 @@ frontend/src/pages/DashboardPage.tsx
 flowchart LR
   F[前端页面] --> A[api.ts]
   A --> R[routes/api.php]
-  R --> M[RequireApiToken]
+  R --> M[auth.simple 中间件]
   M --> C[Controller]
   C --> O[Model]
   O --> D[(SQLite)]
 `} />
 
-### 3. 你要兜底的后端问题
+### 3. 你负责回答的问题
 
-你不一定逐行讲所有控制器，但老师问到这些，你要能接住：
+你不需要逐行讲所有业务控制器，也不能替其他组员答辩。老师问到这些，你要能回答：
 
-- 为什么要有路由？
-- 为什么要有中间件？
-- 为什么检测异常放后端判断？
-- 数据库表之间是什么关系？
+- 为什么要有 `routes/api.php`？
+- 为什么除 `/api/login` 外的接口要登录？
+- `auth.simple` 中间件大概做什么？
+- `/api/users` 为什么只能管理员访问？
+- 为什么不能删除最后一个管理员或当前登录用户？
+- 前端点击按钮后，数据如何进入 PHP 后端？
 - 如何证明项目不是静态页面？
-- 前端点击按钮后 PHP 后端发生了什么？
-- 样本详情为什么能展示任务、检测结果、异常记录和分析报告？
-- `report_summary` 和普通 `summary`、`suggestion` 有什么区别？
+
+如果老师问到样本详情、异常判断、分析建议细节，可以这样收住：
+
+> 这个问题属于林宇涵的模块。我负责说明请求如何经过路由和中间件进入对应控制器，具体业务规则由负责该控制器的同学说明。
+
+## 用户管理怎么讲
+
+你新增/明确负责用户管理这一块。
+
+要看文件：
+
+```text
+backend/app/Http/Controllers/UserController.php
+backend/app/Http/Controllers/AuthController.php
+backend/app/Models/User.php
+backend/tests/Feature/AuthUserManagementTest.php
+```
+
+必背说法：
+
+> 用户管理不是完整 RBAC，只区分 `admin` 和 `user`。后端会根据 token 找到当前用户，再判断是否是管理员。只有管理员才能查询、创建、修改和删除用户。为了避免系统没人能管理，后端还限制不能删除当前登录用户、不能删除最后一个管理员，也不能把最后一个管理员降级。
 
 ## 你的必背说法
 
-> 我负责 PHP 后端总体架构和前后端集成。项目使用 Laravel 的路由、中间件、控制器、模型和迁移组织后端代码；前端通过 api.ts 请求 `/api/*` 接口，后端校验后写入 SQLite，再返回 JSON 刷新页面。样本详情和首页近期分析建议是我负责兜底的集成点。
+> 我负责 PHP 后端总体架构、API 路由入口、登录中间件、用户管理和接口集成。项目使用 Laravel 的路由、中间件、控制器、模型和迁移组织后端代码；前端通过 `api.ts` 请求 `/api/*` 接口，后端校验后写入 SQLite，再返回 JSON 刷新页面。具体业务控制器由对应同学负责，我不会替其他组员答辩。
 
 ## 如果老师追问
 
@@ -77,13 +97,19 @@ flowchart LR
 
 答：
 
-> 我负责整体后端架构、API 入口、中间件和数据库关系统筹，并负责把前端页面和 PHP 后端接口打通。
+> 我负责后端总体架构、API 入口、登录保护、用户管理、数据库关系的整体说明，以及前端页面如何通过接口调用 PHP 后端。
 
 ### 问：你是不是只做前端？
 
 答：
 
-> 不是。前端是展示和操作入口，我还负责解释请求如何进入 Laravel 后端，以及后端如何通过路由、中间件、控制器和模型完成业务闭环。
+> 不是。前端只是展示和操作入口，我负责解释请求如何进入 Laravel 后端，以及后端如何通过路由、中间件、控制器和模型读写数据库。
+
+### 问：你能不能帮其他组员讲业务控制器？
+
+答：
+
+> 老师要求我们按分工答辩，所以我只回答自己负责的后端架构、接口入口、登录保护和用户管理。业务控制器细节由对应负责人回答。
 
 ### 问：为什么不用纯 PHP？
 
