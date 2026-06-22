@@ -58,11 +58,12 @@ VITE_API_BASE_URL=http://127.0.0.1:8000/api
 | Controller | 职责 |
 | --- | --- |
 | DashboardController | 首页统计接口 |
-| InspectionTaskController | 任务列表、创建、开始、提交 |
+| TaskController | 任务列表、创建、修改、开始、提交、删除 |
 | SampleController | 样本列表、登记、修改、删除、详情 |
-| SampleResultController | 检测结果列表、录入、修改、删除 |
+| ResultController | 检测结果列表、录入、修改、删除 |
 | ExceptionController | 异常列表、上报、处理 |
 | AnalysisController | 样本分析建议生成 |
+| UserController | 管理员用户管理，包含查询、创建、修改、删除 |
 
 ### 推荐 Model
 
@@ -72,10 +73,10 @@ VITE_API_BASE_URL=http://127.0.0.1:8000/api
 | InspectionTask | inspection_tasks |
 | Sample | samples |
 | SampleResult | sample_results |
-| ExceptionRecord | exceptions |
+| SampleException | exceptions |
 | AnalysisJob | analysis_jobs |
 
-说明：`Exception` 是 PHP 语言中的常见异常类名，模型命名建议使用 `ExceptionRecord`，避免混淆。
+说明：`Exception` 是 PHP 语言中的常见异常类名，因此项目实际使用 `SampleException` 表示样本异常记录，避免和 PHP 内置异常概念混淆。
 
 ## 前后端交互流程
 

@@ -95,10 +95,10 @@ mindmap
 - [答辩演示脚本](./docs/07-demo-script.md)
 - [团队协作模板](./docs/08-team-work-template.md)
 - [常见问题](./docs/09-faq.md)
-- [分工 1：PHP 总体架构、接口入口、数据库设计统筹与前端集成](./docs/team-01-architecture-frontend.md)
-- [分工 2：PHP 核心业务控制器与异常分析逻辑](./docs/team-02-php-core-business.md)
-- [分工 3：PHP 单表结构、基础模型与种子数据讲解](./docs/team-03-php-database-easy.md)
-- [分工 4：PHP 登录接口、运行命令与测试结果讲解](./docs/team-04-php-auth-test-easy.md)
+- [分工 1：PHP 后端总体架构、接口入口与用户管理](./docs/team-01-architecture-frontend.md)
+- [分工 2：PHP 核心业务控制器与异常分析逻辑（林宇涵）](./docs/team-02-php-core-business.md)
+- [分工 3：PHP 单表结构、基础模型与种子数据讲解（邢文博）](./docs/team-03-php-database-easy.md)
+- [分工 4：PHP 登录接口、运行命令与测试结果讲解（高子昱）](./docs/team-04-php-auth-test-easy.md)
 
 ## 本地运行
 
